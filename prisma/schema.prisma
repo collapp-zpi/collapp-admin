@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider          = "postgres"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Developer {
+  id        String        @id @default(cuid())
+  key       String
+  createdAt DateTime      @default(now())
+  name      String
+  avatar    String
+  drafts    DraftPlugin[]
+}
+
+model DraftPlugin {
+  id          String       @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  date        DateTime     @default(now())
+  status      PluginStatus @default(Pending)
+  author      Developer    @relation(fields: [authorId], references: [id])
+  authorId    String
+}
+
+enum PluginStatus {
+  Private
+  Rejected
+  Pending
+}

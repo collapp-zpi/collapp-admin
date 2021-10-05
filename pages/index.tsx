@@ -1,6 +1,8 @@
 import type {InferGetServerSidePropsType} from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import {useSession} from "next-auth/react";
+import { signIn } from "next-auth/react"
 
 export async function getServerSideProps() {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`)
@@ -12,6 +14,8 @@ export async function getServerSideProps() {
 }
 
 const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const s = useSession()
+  console.log(s)
   console.log(props.developers)
   return (
     <div className={styles.container}>
@@ -22,7 +26,10 @@ const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => 
       </Head>
 
       <main className={styles.main}>
-        {props.developers.length}
+        <button onClick={() => signIn()}>Sign in</button>
+        <div>
+          {props.developers.length}
+        </div>
       </main>
     </div>
   )

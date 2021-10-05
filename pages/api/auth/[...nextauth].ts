@@ -21,4 +21,14 @@ export default NextAuth({
   ],
   adapter: PrismaAdapter(prisma),
   secret: 'secret',
+  callbacks: {
+    async signIn({ user: { email }, email: { verificationRequest } }) {
+      // if user attempts to send a verification email
+      if (verificationRequest) {
+        // check if there is a user with that email
+        return true
+      }
+      return true
+    }
+  }
 })

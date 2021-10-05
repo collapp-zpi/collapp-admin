@@ -1,7 +1,7 @@
 import type {InferGetServerSidePropsType} from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import {useSession} from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
 import { signIn } from "next-auth/react"
 
 export async function getServerSideProps() {
@@ -14,9 +14,15 @@ export async function getServerSideProps() {
 }
 
 const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const s = useSession()
-  console.log(s)
-  console.log(props.developers)
+  const { data } = useSession()
+
+  if (!data)
+    return (
+      <div className={styles.container}>
+        <button onClick={() => signIn()}>Sign in</button>
+      </div>
+    )
+
   return (
     <div className={styles.container}>
       <Head>
@@ -24,9 +30,9 @@ const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => 
         <meta name="description" content="Collapp admin basic setup" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      {console.log(props.developers)}
       <main className={styles.main}>
-        <button onClick={() => signIn()}>Sign in</button>
+        <button onClick={() => signOut()}>Sign out</button>
         <div>
           {props.developers.length}
         </div>

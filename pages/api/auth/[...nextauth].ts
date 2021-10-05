@@ -1,6 +1,9 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
-import { PrismaExtendedAdapter } from "../../../config/PrismaExtendedAdapter";
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 export default NextAuth({
   providers: [
@@ -16,11 +19,6 @@ export default NextAuth({
       from: process.env.EMAIL_FROM
     }),
   ],
-  adapter: PrismaExtendedAdapter({
-    user: 'AdminUser',
-    account: 'AdminAccount',
-    session: 'AdminSession',
-    verificationRequest: 'AdminVerificationRequest'
-  }),
+  adapter: PrismaAdapter(prisma),
   secret: 'secret',
 })

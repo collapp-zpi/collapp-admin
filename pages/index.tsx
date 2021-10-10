@@ -21,6 +21,7 @@ const Home = (
   const [isError, setError] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isSuccessful, setSuccessful] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ const Home = (
     setLoading(true);
     const response: any = await signIn("email", {
       redirect: false,
-      email: e.target.email.value,
+      email: email,
     });
 
     if (response.error) {
@@ -46,7 +47,13 @@ const Home = (
         {isError && <h1>There was an error. Try again</h1>}
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email</label>
-          <input type="text" id="email" name="email" />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <button type="submit">Sign in</button>
         </form>
       </div>

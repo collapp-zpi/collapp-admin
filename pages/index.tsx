@@ -40,11 +40,10 @@ const Home = (
     setLoading(false);
   };
 
-  if (!(data || isSuccessful))
+  if (!(data || isSuccessful || isLoading))
     return (
       <div className={styles.container}>
         {isError && <h1>There was an error. Try again</h1>}
-        {isLoading && <h1>Loading...</h1>}
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email</label>
           <input type="text" id="email" name="email" />
@@ -52,11 +51,16 @@ const Home = (
         </form>
       </div>
     );
-
-  if (isSuccessful) {
+  else if (isSuccessful) {
     return (
       <div className={styles.container}>
         <h1>Check your email inbox</h1>
+      </div>
+    );
+  } else if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <h1>Loading...</h1>
       </div>
     );
   }

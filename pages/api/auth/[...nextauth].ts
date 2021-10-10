@@ -16,6 +16,10 @@ export default NextAuth({
       from: process.env.EMAIL_FROM,
     }),
   ],
+  pages: {
+    //signIn: "../../",
+    error: "../../error",
+  },
   adapter: PrismaExtendedAdapter("admin"),
   secret: "secret",
   callbacks: {

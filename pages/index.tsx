@@ -19,18 +19,32 @@ const Home = (
 ) => {
   const { data } = useSession();
   const [isError, setError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isSuccessful, setSuccessful] = useState(false);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const response = await signIn("email", {
+    setError(false);
+    setLoading(true);
+    const response: any = await signIn("email", {
       redirect: false,
       email: e.target.email.value,
     });
-    console.log(response);
+
+    if (response.error) {
+      setError(true);
+    } else {
+      setSuccessful(true);
+    }
+
+    setLoading(false);
   };
 
-  if (!data)
+  if (!(data || isSuccessful))
     return (
       <div className={styles.container}>
+        {isError && <h1>There was an error. Try again</h1>}
+        {isLoading && <h1>Loading...</h1>}
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email</label>
           <input type="text" id="email" name="email" />
@@ -38,6 +52,14 @@ const Home = (
         </form>
       </div>
     );
+
+  if (isSuccessful) {
+    return (
+      <div className={styles.container}>
+        <h1>Check your email inbox</h1>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>

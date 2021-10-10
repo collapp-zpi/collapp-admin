@@ -1,11 +1,16 @@
-import type {InferGetServerSidePropsType} from 'next'
+import type {GetServerSideProps, InferGetServerSidePropsType} from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {signOut, useSession} from "next-auth/react";
 import { signIn } from "next-auth/react"
 
-export async function getServerSideProps() {
-  const res = await fetch(`${process.env.BASE_URL}/api/developers`)
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
+    method: "GET",
+    headers: {
+      ...(context?.req?.headers?.cookie && { cookie: context.req.headers.cookie })
+    },
+  })
   const developers = await res.json()
 
   return {

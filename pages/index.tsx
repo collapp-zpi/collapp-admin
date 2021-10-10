@@ -19,11 +19,11 @@ const Home = (
 ) => {
   const { data } = useSession();
   const [isError, setError] = useState(false);
-  const sendEmail = async () => {
-    //e.preventDefault();
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     const response = await signIn("email", {
       redirect: false,
-      email: "24494222223330@stuuudent.pwr.edu.pl",
+      email: e.target.email.value,
     });
     console.log(response);
   };
@@ -31,10 +31,10 @@ const Home = (
   if (!data)
     return (
       <div className={styles.container}>
-        <form>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email</label>
           <input type="text" id="email" name="email" />
-          <button onSubmit={sendEmail}>Sign in</button>
+          <button type="submit">Sign in</button>
         </form>
       </div>
     );

@@ -43,10 +43,10 @@ const Home = (
   };
 
   if (!data) {
-    if (status == null || status == Status.Error) {
+    if (!status || status === Status.Error) {
       return (
         <div className={styles.container}>
-          {status !== null && <h1>There was an error. Try again</h1>}
+          {!!status && <h1>There was an error. Try again</h1>}
           <form onSubmit={handleSubmit}>
             <label>
               Email
@@ -61,19 +61,20 @@ const Home = (
           </form>
         </div>
       );
-    } else if (status == Status.Success) {
+    }
+
+    if (status === Status.Success)
       return (
         <div className={styles.container}>
           <h1>Check your email inbox</h1>
         </div>
       );
-    } else {
-      return (
-        <div className={styles.container}>
-          <h1>Loading...</h1>
-        </div>
-      );
-    }
+
+    return (
+      <div className={styles.container}>
+        <h1>Loading...</h1>
+      </div>
+    );
   }
 
   return (

@@ -1,8 +1,10 @@
-import type {GetServerSideProps, InferGetServerSidePropsType} from 'next'
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import {signOut, useSession} from "next-auth/react";
-import { signIn } from "next-auth/react"
+
+import type { InferGetServerSidePropsType } from "next";
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { signOut, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
@@ -12,21 +14,74 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   })
   const developers = await res.json()
-
+  
   return {
-    props: { developers }
-  }
+    props: { developers },
+  };
 }
 
-const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data } = useSession()
+enum Status {
+  Loading,
+  Error,
+  Success,
+}
 
-  if (!data)
+const Home = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const { data } = useSession();
+  const [status, setStatus] = useState<Status | null>(null);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setStatus(Status.Loading);
+    const response: any = await signIn("email", {
+      redirect: false,
+      email,
+    });
+
+    if (response.error) {
+      setStatus(Status.Error);
+    } else {
+      setStatus(Status.Success);
+    }
+  };
+
+  if (!data) {
+    if (!status || status === Status.Error) {
+      return (
+        <div className={styles.container}>
+          {!!status && <h1>There was an error. Try again</h1>}
+          <form onSubmit={handleSubmit}>
+            <label>
+              Email
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <button type="submit">Sign in</button>
+          </form>
+        </div>
+      );
+    }
+
+    if (status === Status.Success)
+      return (
+        <div className={styles.container}>
+          <h1>Check your email inbox</h1>
+        </div>
+      );
+
     return (
       <div className={styles.container}>
-        <button onClick={() => signIn()}>Sign in</button>
+        <h1>Loading...</h1>
       </div>
-    )
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -38,12 +93,10 @@ const Home = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => 
       {console.log(props.developers)}
       <main className={styles.main}>
         <button onClick={() => signOut()}>Sign out</button>
-        <div>
-          {props.developers.length}
-        </div>
+        <div>{props.developers.length}</div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

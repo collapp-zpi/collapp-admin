@@ -1,6 +1,6 @@
-import NextAuth from "next-auth";
-import EmailProvider from "next-auth/providers/email";
-import { PrismaExtendedAdapter } from "../../../config/PrismaExtendedAdapter";
+import NextAuth from 'next-auth'
+import EmailProvider from 'next-auth/providers/email'
+import { PrismaExtendedAdapter } from '../../../config/PrismaExtendedAdapter'
 
 export default NextAuth({
   providers: [
@@ -18,18 +18,18 @@ export default NextAuth({
   ],
   pages: {
     //signIn: "../../",
-    error: "../../error",
+    error: '../../error',
   },
-  adapter: PrismaExtendedAdapter("admin"),
-  secret: "secret",
+  adapter: PrismaExtendedAdapter('admin'),
+  secret: 'secret',
   callbacks: {
     async signIn({ user: { email }, email: { verificationRequest } }) {
       // if user attempts to send a verification email
       if (verificationRequest) {
         // check if there is a user with that email
-        return true;
+        return true
       }
-      return true;
+      return true
     },
   },
-});
+})

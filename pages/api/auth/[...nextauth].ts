@@ -25,7 +25,7 @@ export default NextAuth({
     newUser: '../../',
   },
   adapter: PrismaExtendedAdapter('admin'),
-  secret: 'secret',
+  secret: process.env.AUTH_EMAIL_SECRET,
   callbacks: {
     async signIn({ user: { email } }) {
       if (!email) return false

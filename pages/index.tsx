@@ -46,14 +46,15 @@ const Home = (
       <div className={styles.container}>
         {isError && <h1>There was an error. Try again</h1>}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
           <button type="submit">Sign in</button>
         </form>
       </div>

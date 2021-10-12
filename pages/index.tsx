@@ -14,63 +14,66 @@ export async function getServerSideProps() {
   };
 }
 
+enum Status {
+  Loading,
+  Error,
+  Success,
+}
+
 const Home = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const { data } = useSession();
-  const [isError, setError] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [isSuccessful, setSuccessful] = useState(false);
+  const [status, setStatus] = useState<Status | null>(null);
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setError(false);
-    setLoading(true);
+    setStatus(Status.Loading);
     const response: any = await signIn("email", {
       redirect: false,
-      email: email,
+      email,
     });
 
     if (response.error) {
-      setError(true);
+      setStatus(Status.Error);
     } else {
-      setSuccessful(true);
+      setStatus(Status.Success);
     }
-
-    setLoading(false);
   };
 
-  if (!(data || isSuccessful || isLoading))
-    return (
-      <div className={styles.container}>
-        {isError && <h1>There was an error. Try again</h1>}
-        <form onSubmit={handleSubmit}>
-          <label>
-            Email
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
-          <button type="submit">Sign in</button>
-        </form>
-      </div>
-    );
-  else if (isSuccessful) {
-    return (
-      <div className={styles.container}>
-        <h1>Check your email inbox</h1>
-      </div>
-    );
-  } else if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <h1>Loading...</h1>
-      </div>
-    );
+  if (!data) {
+    if (status == null || status == Status.Error) {
+      return (
+        <div className={styles.container}>
+          {status !== null && <h1>There was an error. Try again</h1>}
+          <form onSubmit={handleSubmit}>
+            <label>
+              Email
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <button type="submit">Sign in</button>
+          </form>
+        </div>
+      );
+    } else if (status == Status.Success) {
+      return (
+        <div className={styles.container}>
+          <h1>Check your email inbox</h1>
+        </div>
+      );
+    } else {
+      return (
+        <div className={styles.container}>
+          <h1>Loading...</h1>
+        </div>
+      );
+    }
   }
 
   return (

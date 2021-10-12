@@ -55,7 +55,7 @@ const Home = (
     if (status == null || status === Status.Error) {
       return (
         <div className={styles.container}>
-          {status != null && <h1>There was an error. Try again</h1>}
+          {status != null && <h1>There was an authorization error.</h1>}
           <form onSubmit={handleSubmit}>
             <label>
               Email

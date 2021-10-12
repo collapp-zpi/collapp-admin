@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import EmailProvider from 'next-auth/providers/email'
 import { PrismaExtendedAdapter } from '../../../config/PrismaExtendedAdapter'
+import { prisma } from '../../../config/PrismaClient'
 
 export default NextAuth({
   providers: [
@@ -17,19 +18,26 @@ export default NextAuth({
     }),
   ],
   pages: {
-    //signIn: "../../",
+    signIn: '../../',
     error: '../../error',
+    signOut: '../../',
+    verifyRequest: '../../',
+    newUser: '../../',
   },
   adapter: PrismaExtendedAdapter('admin'),
   secret: 'secret',
   callbacks: {
-    async signIn({ user: { email }, email: { verificationRequest } }) {
-      // if user attempts to send a verification email
-      if (verificationRequest) {
-        // check if there is a user with that email
+    async signIn({ user: { email } }) {
+      if (!email) return false
+
+      const admin = await prisma.adminUser.findUnique({
+        where: { email },
+      })
+
+      if (admin) {
         return true
       }
-      return true
+      return false
     },
   },
 })

@@ -1,29 +1,10 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { signOut, useSession } from 'next-auth/react'
 import { signIn } from 'next-auth/react'
 import { FormEvent, useState } from 'react'
 import { RedirectableProviderType } from 'next-auth/providers'
-import Developer from '../components/Developer'
-import { DeveloperUser } from '@prisma/client'
-
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
-  const developers = await res.json()
-
-  return {
-    props: { developers },
-  }
-}
+import Link from 'next/link'
 
 enum Status {
   Loading,
@@ -31,9 +12,7 @@ enum Status {
   Success,
 }
 
-const Home = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) => {
+const Home = () => {
   const { data } = useSession()
   const [status, setStatus] = useState<Status | null>(null)
   const [email, setEmail] = useState('')
@@ -98,11 +77,9 @@ const Home = (
       </Head>
       <main className={styles.main}>
         <button onClick={() => signOut()}>Sign out</button>
-        <section>
-          {props.developers.map((data: DeveloperUser) => {
-            <Developer key={data.id} {...data} />
-          })}
-        </section>
+        <Link href="./developers">
+          <button>Developers</button>
+        </Link>
       </main>
     </div>
   )

@@ -9,9 +9,8 @@ import { DeveloperUser } from '@prisma/client'
 
 const Developer = (developer: DeveloperUser) => (
   <div>
-    {/* <img src={developer.image || ""} alt="" /> */}
+    <img src={developer.image || ''} alt="" />
     <h1>{developer.name}</h1>
-    <p>{developer.email}</p>
   </div>
 )
 

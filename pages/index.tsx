@@ -5,6 +5,9 @@ import { signOut, useSession } from 'next-auth/react'
 import { signIn } from 'next-auth/react'
 import { FormEvent, useState } from 'react'
 import { RedirectableProviderType } from 'next-auth/providers'
+import Developer from '../components/Developer'
+import { DeveloperUser } from '@prisma/client'
+
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
@@ -86,7 +89,6 @@ const Home = (
     )
   }
 
-  console.log(props.developers)
   return (
     <div className={styles.container}>
       <Head>
@@ -96,7 +98,11 @@ const Home = (
       </Head>
       <main className={styles.main}>
         <button onClick={() => signOut()}>Sign out</button>
-        <div>{props.developers.length}</div>
+        <section>
+          {props.developers.map((data: DeveloperUser) => {
+            <Developer key={data.id} {...data} />
+          })}
+        </section>
       </main>
     </div>
   )

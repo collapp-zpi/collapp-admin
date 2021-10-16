@@ -2,7 +2,8 @@ import { DeveloperUser } from '@prisma/client'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
 import Developer from '../components/Developer'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -24,6 +25,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function FirstPost(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!data) {
+      router.push('./')
+    }
+  }, [])
+
   const { data } = useSession()
   if (data)
     return (

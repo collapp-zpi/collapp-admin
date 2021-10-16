@@ -8,10 +8,13 @@ import { DeveloperUser } from '@prisma/client'
 // }
 
 const Developer = (developer: DeveloperUser) => (
-  <div>
-    <img src={developer.image || ''} alt="" />
-    <h1>{developer.name}</h1>
-  </div>
+  <tr>
+    <td>
+      <img src={developer.image || ''} alt="" />
+    </td>
+    <td>{developer.name}</td>
+    <td>{developer.email}</td>
+  </tr>
 )
 
 export default Developer

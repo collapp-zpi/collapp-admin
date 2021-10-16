@@ -1,6 +1,7 @@
 import { DeveloperUser } from '@prisma/client'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import React from 'react'
 import Developer from '../components/Developer'
 
@@ -26,13 +27,21 @@ export default function FirstPost(
   const { data } = useSession()
   if (data)
     return (
-      <>
+      <div>
+        <Link href="./">
+          <button>Back</button>
+        </Link>
         <table>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
           {props.developers.map((data: DeveloperUser) => (
             <Developer key={data.id} {...data} />
           ))}
         </table>
-      </>
+      </div>
     )
 
   return null

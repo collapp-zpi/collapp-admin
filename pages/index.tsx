@@ -80,6 +80,9 @@ const Home = () => {
         <Link href="panel/developers">
           <button>Developers</button>
         </Link>
+        <Link href="panel/plugins">
+          <button>Plugins</button>
+        </Link>
       </main>
     </div>
   )

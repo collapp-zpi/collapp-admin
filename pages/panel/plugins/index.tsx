@@ -3,10 +3,10 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import DevelopersList from '../../../components/DevelopersList'
+import PluginsList from '../../../components/PluginsList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
     method: 'GET',
     headers: {
       ...(context?.req?.headers?.cookie && {
@@ -14,10 +14,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
-  const developers = await res.json()
+  const plugins = await res.json()
 
   return {
-    props: { developers },
+    props: { plugins },
   }
 }
 
@@ -28,7 +28,7 @@ export default function FirstPost(
 
   useEffect(() => {
     if (!data) {
-      router.push('./')
+      router.push('../')
     }
   }, [])
 
@@ -39,7 +39,7 @@ export default function FirstPost(
         <Link href="../">
           <button>Back</button>
         </Link>
-        <DevelopersList developers={props.developers} />
+        <PluginsList plugins={props.plugins} />
       </div>
     )
 

@@ -17,14 +17,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   )
 
-  const plugins = await fetch(`${process.env.BASE_URL}/api/plugins`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
+  const plugins = await fetch(
+    `${process.env.BASE_URL}/api/developers/plugins/${id}`,
+    {
+      method: 'GET',
+      headers: {
+        ...(context?.req?.headers?.cookie && {
+          cookie: context.req.headers.cookie,
+        }),
+      },
     },
-  })
+  )
 
   return {
     props: {
@@ -52,7 +55,11 @@ const Developer = ({
         <h1>{name}</h1>
         <p>{email}</p>
         <hr />
-        <PluginsList plugins={plugins}></PluginsList>
+        {plugins.length ? (
+          <PluginsList plugins={plugins}></PluginsList>
+        ) : (
+          <p>Developers hasn't created any plugins yet</p>
+        )}
       </div>
     </>
   )

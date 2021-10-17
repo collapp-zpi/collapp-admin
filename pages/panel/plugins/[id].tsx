@@ -4,7 +4,7 @@ import React from 'react'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
-  const res = await fetch(`${process.env.BASE_URL}/api/plugin/${id}`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/plugins/${id}`, {
     method: 'GET',
     headers: {
       ...(context?.req?.headers?.cookie && {

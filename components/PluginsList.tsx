@@ -15,7 +15,7 @@ const PluginsList = ({ plugins }: { plugins: DraftPlugin[] }) => (
       </thead>
       <tbody>
         {plugins.map((plugin: DraftPlugin) => (
-          <Link href={`/panel/plugin/${plugin.id}`}>
+          <Link href={`/panel/plugins/${plugin.id}`}>
             <tr style={{ cursor: 'pointer' }}>
               <td>
                 <img src={plugin.icon || ''} alt="" />

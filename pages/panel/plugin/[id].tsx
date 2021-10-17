@@ -1,8 +1,10 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Link from 'next/link'
+import React from 'react'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
-  const res = await fetch(`${process.env.BASE_URL}/api/plugins/${id}`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/plugin/${id}`, {
     method: 'GET',
     headers: {
       ...(context?.req?.headers?.cookie && {
@@ -20,11 +22,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Plugin = ({
   plugin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(plugin)
-  const { name, description, id } = plugin
+  const { name, description } = plugin
 
   return (
     <div>
+      <Link href="../plugins">
+        <button>Plugin list</button>
+      </Link>
+      <Link href={`/panel/developers/${plugin.authorId}`}>
+        <button>Developer</button>
+      </Link>
       <h1>{name}</h1>
       <p>{description}</p>
     </div>

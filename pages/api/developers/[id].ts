@@ -22,7 +22,7 @@ export default async function handler(
   })
 
   if (!developer) {
-    return res.status(404).json({ message: 'Plugin not found' })
+    return res.status(404).json({ message: 'Developer not found' })
   }
 
   if (req.method === 'GET') {

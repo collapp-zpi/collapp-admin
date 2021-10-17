@@ -1,5 +1,6 @@
 import React from 'react'
 import { DeveloperUser } from '@prisma/client'
+import Link from 'next/link'
 
 const DevelopersList = ({ developers }: { developers: DeveloperUser[] }) => (
   <div>
@@ -13,13 +14,15 @@ const DevelopersList = ({ developers }: { developers: DeveloperUser[] }) => (
       </thead>
       <tbody>
         {developers.map((developer: DeveloperUser) => (
-          <tr>
-            <td>
-              <img src={developer.image || ''} alt="" />
-            </td>
-            <td>{developer.name}</td>
-            <td>{developer.email}</td>
-          </tr>
+          <Link href={`/panel/developers/${developer.id}`}>
+            <tr style={{ cursor: 'pointer' }}>
+              <td>
+                <img src={developer.image || ''} alt="" />
+              </td>
+              <td>{developer.name}</td>
+              <td>{developer.email}</td>
+            </tr>
+          </Link>
         ))}
       </tbody>
     </table>

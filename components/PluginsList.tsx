@@ -1,5 +1,6 @@
 import React from 'react'
 import { DraftPlugin } from '@prisma/client'
+import Link from 'next/link'
 
 const PluginsList = ({ plugins }: { plugins: DraftPlugin[] }) => (
   <div>
@@ -14,14 +15,16 @@ const PluginsList = ({ plugins }: { plugins: DraftPlugin[] }) => (
       </thead>
       <tbody>
         {plugins.map((plugin: DraftPlugin) => (
-          <tr>
-            <td>
-              <img src={plugin.icon || ''} alt="" />
-            </td>
-            <td>{plugin.name}</td>
-            <td>{plugin.date}</td>
-            <td>{plugin.status}</td>
-          </tr>
+          <Link href={`/panel/plugins/${plugin.id}`}>
+            <tr>
+              <td>
+                <img src={plugin.icon || ''} alt="" />
+              </td>
+              <td>{plugin.name}</td>
+              <td>{plugin.date}</td>
+              <td>{plugin.status}</td>
+            </tr>
+          </Link>
         ))}
       </tbody>
     </table>

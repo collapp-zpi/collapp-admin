@@ -14,7 +14,7 @@ const DevelopersList = ({ developers }: { developers: DeveloperUser[] }) => (
       </thead>
       <tbody>
         {developers.map((developer: DeveloperUser) => (
-          <Link href={`/panel/developers/${developer.id}`}>
+          <Link key={developer.id} href={`/panel/developers/${developer.id}`}>
             <tr style={{ cursor: 'pointer' }}>
               <td>
                 <img src={developer.image || ''} alt="" />

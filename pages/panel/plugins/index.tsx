@@ -1,3 +1,4 @@
+import { DraftPlugin } from '.pnpm/@prisma+client@3.1.1_prisma@3.1.1/node_modules/.prisma/client'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -29,6 +30,27 @@ export default function FirstPost(
   const [pluginList, setPluginList] = useState(props.plugins)
   const [name, setName] = useState('')
   const [status, setStatus] = useState('')
+
+  const filterPlugins = () => {
+    let filteredPlugins: DraftPlugin[] = props.plugins
+    if (name !== '') {
+      filteredPlugins = filteredPlugins.filter((plugin: DraftPlugin) =>
+        plugin.name.toLowerCase().includes(name.toLowerCase()),
+      )
+    }
+
+    if (status !== '') {
+      filteredPlugins = filteredPlugins.filter(
+        (plugin: DraftPlugin) => plugin.status === status,
+      )
+    }
+
+    setPluginList(filteredPlugins)
+  }
+
+  useEffect(() => {
+    filterPlugins()
+  }, [name, status])
 
   if (data)
     return (

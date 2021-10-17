@@ -77,7 +77,7 @@ const Home = () => {
       </Head>
       <main className={styles.main}>
         <button onClick={() => signOut()}>Sign out</button>
-        <Link href="./developers">
+        <Link href="panel/developers">
           <button>Developers</button>
         </Link>
       </main>

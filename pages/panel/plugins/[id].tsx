@@ -40,7 +40,19 @@ const Plugin = ({
       <button>Download</button>
       <Button onClick={() => setVisible(true)}>Modal</Button>
       <Modal visible={visible} isVisible={setVisible}>
-        <h1>Test</h1>
+        <h1>What to do?</h1>
+        <button
+          type="button"
+          className="border-2 border-black bg-green-500 p-2 m-2"
+        >
+          Accept
+        </button>
+        <button
+          type="button"
+          className="border-2 border-black bg-red-500 p-2 m-2"
+        >
+          Reject
+        </button>
       </Modal>
     </div>
   )

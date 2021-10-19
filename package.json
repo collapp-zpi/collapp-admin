@@ -13,14 +13,20 @@
     "shared-pull": "git subtree pull --prefix=shared https://github.com/collapp-zpi/shared main"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.0",
     "@next-auth/prisma-adapter": "^0.5.2-next.15",
     "@prisma/client": "3.1.1",
+    "classnames": "^2.3.1",
     "eslint-plugin-prettier": "^4.0.0",
     "next": "11.1.2",
     "next-auth": "^4.0.0-beta.4",
     "nodemailer": "^6.6.5",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.17.4",
+    "react-icons": "^4.3.1",
+    "react-textarea-autosize": "^8.3.3",
+    "styled-components": "^5.3.1"
   },
   "devDependencies": {
     "@types/react": "17.0.24",

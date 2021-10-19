@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import Modal from '../../../components/Modal'
+import Modal from '../../../shared/components/Modal'
 import Button from '../../../shared/components/button/Button'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

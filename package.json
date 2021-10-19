@@ -13,23 +13,35 @@
     "shared-pull": "git subtree pull --prefix=shared https://github.com/collapp-zpi/shared main"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.0",
+    "@hookform/resolvers": "^2.8.2",
     "@next-auth/prisma-adapter": "^0.5.2-next.15",
     "@prisma/client": "3.1.1",
+    "classnames": "^2.3.1",
     "eslint-plugin-prettier": "^4.0.0",
     "next": "11.1.2",
     "next-auth": "^4.0.0-beta.4",
     "nodemailer": "^6.6.5",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.17.4",
+    "react-icons": "^4.3.1",
+    "react-textarea-autosize": "^8.3.3",
+    "styled-components": "^5.3.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/react": "17.0.24",
+    "@types/styled-components": "^5.1.15",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "autoprefixer": "^10.3.7",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.3.0",
+    "postcss": "^8.3.9",
     "prettier": "^2.4.1",
     "prisma": "^3.1.1",
+    "tailwindcss": "^2.2.17",
     "typescript": "4.4.3"
   }
 }

@@ -1,4 +1,4 @@
-import { DraftPlugin } from '.pnpm/@prisma+client@3.1.1_prisma@3.1.1/node_modules/.prisma/client'
+import { DraftPlugin } from '@prisma/client'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'

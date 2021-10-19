@@ -68,7 +68,9 @@ export default function FirstPost(
           Status:
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             {Statuses.map((status) => (
-              <option value={status}>{status}</option>
+              <option key={status} value={status}>
+                {status}
+              </option>
             ))}
           </select>
         </label>

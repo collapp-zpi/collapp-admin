@@ -1,6 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+import Modal from '../../../components/Modal'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -23,6 +24,7 @@ const Plugin = ({
   plugin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { name, description } = plugin
+  const [visible, setVisible] = useState(false)
 
   return (
     <div>
@@ -35,6 +37,10 @@ const Plugin = ({
       <h1>{name}</h1>
       <p>{description}</p>
       <button>Download</button>
+      <button onClick={() => setVisible(true)}>Modal</button>
+      <Modal visible={visible} hide={setVisible}>
+        <h1>Test</h1>
+      </Modal>
     </div>
   )
 }

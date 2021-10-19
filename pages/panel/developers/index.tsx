@@ -25,15 +25,14 @@ export default function FirstPost(
 ) {
   const { data } = useSession()
 
-  if (data)
-    return (
-      <div>
-        <Link href="../">
-          <button>Back</button>
-        </Link>
-        <DevelopersList developers={props.developers} />
-      </div>
-    )
+  if (!data) return null
 
-  return null
+  return (
+    <div>
+      <Link href="../">
+        <button>Back</button>
+      </Link>
+      <DevelopersList developers={props.developers} />
+    </div>
+  )
 }

@@ -31,7 +31,7 @@ export default function FirstPost(
   const [name, setName] = useState('')
   const [status, setStatus] = useState('')
 
-  const filterPlugins = () => {
+  useEffect(() => {
     let filteredPlugins: DraftPlugin[] = props.plugins
     if (name !== '') {
       filteredPlugins = filteredPlugins.filter((plugin: DraftPlugin) =>
@@ -46,39 +46,34 @@ export default function FirstPost(
     }
 
     setPluginList(filteredPlugins)
-  }
-
-  useEffect(() => {
-    filterPlugins()
   }, [name, status])
 
-  if (data)
-    return (
-      <div>
-        <Link href="../">
-          <button>Back</button>
-        </Link>
-        <div>
-          <label>
-            Name:
-            <input
-              type="search"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-          <label>
-            Status:
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-              {Statuses.map((status) => (
-                <option value={status}>{status}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <PluginsList plugins={pluginList} />
-      </div>
-    )
+  if (!data) return null
 
-  return null
+  return (
+    <div>
+      <Link href="../">
+        <button>Back</button>
+      </Link>
+      <div>
+        <label>
+          Name:
+          <input
+            type="search"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <label>
+          Status:
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+            {Statuses.map((status) => (
+              <option value={status}>{status}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+      <PluginsList plugins={pluginList} />
+    </div>
+  )
 }

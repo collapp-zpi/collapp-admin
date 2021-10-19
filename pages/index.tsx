@@ -40,8 +40,9 @@ const Home = () => {
           {status != null && <h1>There was an authorization error.</h1>}
           <form onSubmit={handleSubmit}>
             <label>
-              Email
+              Email:
               <input
+                className="border-2"
                 type="email"
                 name="email"
                 value={email}

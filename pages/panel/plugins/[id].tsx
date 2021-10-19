@@ -39,7 +39,7 @@ const Plugin = ({
       <p>{description}</p>
       <button>Download</button>
       <Button onClick={() => setVisible(true)}>Modal</Button>
-      <Modal visible={visible} hide={setVisible}>
+      <Modal visible={visible} isVisible={setVisible}>
         <h1>Test</h1>
       </Modal>
     </div>

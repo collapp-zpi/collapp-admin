@@ -3,11 +3,11 @@ import React, { ReactNode } from 'react'
 
 const Modal = ({
   visible,
-  hide,
+  isVisible,
   children,
 }: {
   visible: boolean
-  hide: (visible: boolean) => void
+  isVisible: (visible: boolean) => void
   children: ReactNode
 }) => (
   <div
@@ -18,7 +18,7 @@ const Modal = ({
   >
     <div
       className="absolute left-0 top-0 w-full h-full bg-black opacity-50"
-      onClick={() => hide(false)}
+      onClick={() => isVisible(false)}
     />
     <div className="bg-white p-4 z-10 rounded-xl shadow-lg">{children}</div>
   </div>

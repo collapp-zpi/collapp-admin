@@ -9,7 +9,7 @@ import { signIn } from 'next-auth/react'
 import { RedirectableProviderType } from 'next-auth/providers'
 
 const schema = object().shape({
-  email: string().email().required(),
+  Email: string().email().required(),
 })
 
 const onSuccess = () => {
@@ -30,15 +30,20 @@ const query = async ({ email }: { email: string }) => {
 }
 
 const SignIn = () => (
-  <UncontrolledForm {...{ schema, query, onSuccess, onError }}>
-    <InputText
-      type="email"
-      name="email"
-      label="Email"
-      icon={MdAlternateEmail}
-    />
-    <SubmitButton />
-  </UncontrolledForm>
+  <div className="flex justify-center align-middle h-full min-h-screen">
+    <UncontrolledForm
+      {...{ schema, query, onSuccess, onError }}
+      className="m-auto"
+    >
+      <InputText
+        type="email"
+        name="Email"
+        label="Email"
+        icon={MdAlternateEmail}
+      />
+      <SubmitButton className="ml-auto mr-auto" />
+    </UncontrolledForm>
+  </div>
 )
 
 export default SignIn

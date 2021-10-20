@@ -9,33 +9,36 @@ import { signIn } from 'next-auth/react'
 import { RedirectableProviderType } from 'next-auth/providers'
 
 const schema = object().shape({
-  email: string().required(),
+  email: string().email().required(),
 })
 
-const onSuccess = (data: any) => {
+const onSuccess = () => {
   toast.success('Email was sent')
 }
 
-const onError = async (data: any) => {
-  console.log(data)
-  toast.error('Email was not send')
+const onError = () => {
+  toast.error('Email was not send.')
 }
 
 const query = async ({ email }: { email: string }) => {
   console.log(email)
-  return signIn<RedirectableProviderType>('email', {
+  const response = await signIn<RedirectableProviderType>('email', {
     redirect: false,
     email,
   })
+  if (!response || response.error) throw new Error('Login error')
 }
 
-const SignIn = () => {
-  return (
-    <UncontrolledForm {...{ schema, query, onSuccess, onError }}>
-      <InputText name="email" label="Email" icon={MdAlternateEmail} />
-      <SubmitButton />
-    </UncontrolledForm>
-  )
-}
+const SignIn = () => (
+  <UncontrolledForm {...{ schema, query, onSuccess, onError }}>
+    <InputText
+      type="email"
+      name="email"
+      label="Email"
+      icon={MdAlternateEmail}
+    />
+    <SubmitButton />
+  </UncontrolledForm>
+)
 
 export default SignIn

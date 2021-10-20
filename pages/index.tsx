@@ -1,11 +1,13 @@
 // import Head from 'next/head'
 // import styles from '../styles/Home.module.css'
-// import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
+import React from 'react'
 // import { signIn } from 'next-auth/react'
 // import { FormEvent, useState } from 'react'
 // import { RedirectableProviderType } from 'next-auth/providers'
 // import Link from 'next/link'
 import LoadingSessionLayout from '../components/LoadingSession'
+import Button from '../shared/components/button/Button'
 
 // enum Status {
 //   Loading,
@@ -17,6 +19,7 @@ const Home = () => {
   return (
     <LoadingSessionLayout>
       <h1>test</h1>
+      <Button onClick={() => signOut()}>Sign out</Button>
     </LoadingSessionLayout>
   )
 }

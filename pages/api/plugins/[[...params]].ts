@@ -1,4 +1,9 @@
-import { createHandler, Get, Param } from '@storyofams/next-api-decorators'
+import {
+  createHandler,
+  Get,
+  Param,
+  NotFoundException,
+} from '@storyofams/next-api-decorators'
 import { prisma } from '../../../config/PrismaClient'
 import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
 
@@ -10,12 +15,18 @@ class Plugins {
   }
 
   @Get('/:id')
-  getPlugin(@Param('id') id: string) {
-    return prisma.draftPlugin.findFirst({
+  async getPlugin(@Param('id') id: string) {
+    const plugin = await prisma.draftPlugin.findFirst({
       where: {
         id: id as string,
       },
     })
+
+    if (!plugin) {
+      throw new NotFoundException('The plugin was not found.')
+    }
+
+    return plugin
   }
 }
 

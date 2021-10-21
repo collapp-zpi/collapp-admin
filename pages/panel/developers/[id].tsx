@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   )
 
   const plugins = await fetch(
-    `${process.env.BASE_URL}/api/developers/plugins/${id}`,
+    `${process.env.BASE_URL}/api/developers/${id}/plugins`,
     {
       method: 'GET',
       headers: {

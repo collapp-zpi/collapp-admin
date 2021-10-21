@@ -9,7 +9,7 @@ import { signIn } from 'next-auth/react'
 import { RedirectableProviderType } from 'next-auth/providers'
 
 const schema = object().shape({
-  Email: string().email().required(),
+  email: string().email().required(),
 })
 
 const onSuccess = () => {
@@ -21,7 +21,6 @@ const onError = () => {
 }
 
 const query = async ({ email }: { email: string }) => {
-  console.log(email)
   const response = await signIn<RedirectableProviderType>('email', {
     redirect: false,
     email,
@@ -37,7 +36,7 @@ const SignIn = () => (
     >
       <InputText
         type="email"
-        name="Email"
+        name="email"
         label="Email"
         icon={MdAlternateEmail}
       />

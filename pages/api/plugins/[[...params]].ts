@@ -10,7 +10,7 @@ class Plugins {
   }
 
   @Get('/:id')
-  getPluginWithId(@Param('id') id: string) {
+  getPlugin(@Param('id') id: string) {
     return prisma.draftPlugin.findFirst({
       where: {
         id: id as string,
@@ -18,3 +18,5 @@ class Plugins {
     })
   }
 }
+
+export default createHandler(Plugins)

@@ -19,7 +19,7 @@ class Plugins {
     if (!limit) {
       return {
         plugins: await prisma.draftPlugin.findMany(),
-        pagination: undefined,
+        pagination: null,
       }
     }
 

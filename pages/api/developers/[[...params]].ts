@@ -19,7 +19,7 @@ class Developers {
     if (!limit) {
       return {
         developers: await prisma.developerUser.findMany(),
-        pagination: undefined,
+        pagination: null,
       }
     }
 

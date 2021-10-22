@@ -18,7 +18,7 @@ class Plugins {
   ) {
     if (!limit) {
       return {
-        developers: prisma.draftPlugin.findMany(),
+        plugins: prisma.draftPlugin.findMany(),
         pagination: undefined,
       }
     }
@@ -38,7 +38,7 @@ class Plugins {
         skip: offset,
         take: limit,
       }),
-      pagination: { pages, currentPage: page, pageSize: limit },
+      pagination: { pages, page, limit },
     }
   }
 

@@ -18,7 +18,7 @@ class Developers {
   ) {
     if (!limit) {
       return {
-        developers: prisma.developerUser.findMany(),
+        developers: await prisma.developerUser.findMany(),
         pagination: undefined,
       }
     }
@@ -34,17 +34,12 @@ class Developers {
     const pages = Math.ceil(developerCount / limit)
 
     return {
-      developers: prisma.developerUser.findMany({
+      developers: await prisma.developerUser.findMany({
         skip: offset,
         take: limit,
       }),
       pagination: { pages, currentPage: page, pageSize: limit },
     }
-  }
-
-  @Get('?limit=:limit&page=:page')
-  getPartOfDeveloperList() {
-    return prisma.developerUser.findMany()
   }
 
   @Get('/:id')

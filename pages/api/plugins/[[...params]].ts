@@ -18,7 +18,7 @@ class Plugins {
   ) {
     if (!limit) {
       return {
-        plugins: prisma.draftPlugin.findMany(),
+        plugins: await prisma.draftPlugin.findMany(),
         pagination: undefined,
       }
     }
@@ -32,12 +32,13 @@ class Plugins {
     }
 
     const pages = Math.ceil(pluginCount / limit)
+    const plugins = await prisma.draftPlugin.findMany({
+      skip: offset,
+      take: limit,
+    })
 
     return {
-      plugins: prisma.draftPlugin.findMany({
-        skip: offset,
-        take: limit,
-      }),
+      plugins,
       pagination: { pages, page, limit },
     }
   }

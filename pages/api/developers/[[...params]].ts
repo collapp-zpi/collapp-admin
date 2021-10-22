@@ -13,7 +13,7 @@ import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
 class Developers {
   @Get()
   async getDeveloperList(
-    @Query('limit', ParseNumberPipe({ nullable: true })) limit: number,
+    @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
     if (!limit) {

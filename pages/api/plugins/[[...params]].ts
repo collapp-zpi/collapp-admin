@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Query,
   ParseNumberPipe,
+  ValidateEnumPipe,
 } from '@storyofams/next-api-decorators'
 import { prisma } from '../../../config/PrismaClient'
 import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
@@ -13,8 +14,9 @@ import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
 class Plugins {
   @Get()
   async getPluginList(
-    @Query('limit', ParseNumberPipe({ nullable: true })) limit: number,
+    @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
+    @Query('plugin') plugin?: string,
   ) {
     if (!limit) {
       return {

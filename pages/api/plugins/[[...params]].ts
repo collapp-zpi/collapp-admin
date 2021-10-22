@@ -15,7 +15,6 @@ class Plugins {
   async getPluginList(
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
-    @Query('plugin') plugin?: string,
   ) {
     if (!limit) {
       return {

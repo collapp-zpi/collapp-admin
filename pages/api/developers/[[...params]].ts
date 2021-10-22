@@ -38,7 +38,7 @@ class Developers {
         skip: offset,
         take: limit,
       }),
-      pagination: { pages, currentPage: page, pageSize: limit },
+      pagination: { pages, page, limit },
     }
   }
 

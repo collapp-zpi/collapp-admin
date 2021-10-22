@@ -5,9 +5,8 @@ import {
   NotFoundException,
   Query,
   ParseNumberPipe,
-  ValidateEnumPipe,
 } from '@storyofams/next-api-decorators'
-import { prisma } from '../../../config/PrismaClient'
+import { prisma } from '../../../shared/utils/prismaClient'
 import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
 
 @NextAuthGuard()

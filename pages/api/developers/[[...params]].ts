@@ -6,8 +6,8 @@ import {
   Query,
   ParseNumberPipe,
 } from '@storyofams/next-api-decorators'
-import { prisma } from '../../../shared/utils/prismaClient'
-import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
+import { prisma } from 'shared/utils/prismaClient'
+import { NextAuthGuard } from 'shared/utils/apiDecorators'
 
 @NextAuthGuard()
 class Developers {

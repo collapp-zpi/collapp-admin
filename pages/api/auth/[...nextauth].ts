@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import EmailProvider from 'next-auth/providers/email'
-import { prisma } from '../../../shared/utils/prismaClient'
-import { PrismaExtendedAdapter } from '../../../shared/utils/PrismaExtendedAdapter'
+import { prisma } from 'shared/utils/prismaClient'
+import { PrismaExtendedAdapter } from 'shared/utils/PrismaExtendedAdapter'
 
 export default NextAuth({
   providers: [

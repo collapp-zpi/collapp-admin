@@ -1,9 +1,8 @@
-import { DraftPlugin } from '@prisma/client'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import PluginsList from '../../../components/PluginsList'
+import React from 'react'
+import PluginsList from 'components/PluginsList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -26,27 +25,6 @@ export default function FirstPost(
 ) {
   const { data } = useSession()
 
-  const [pluginList, setPluginList] = useState(props.plugins)
-  const [name, setName] = useState('')
-  const [status, setStatus] = useState('')
-
-  useEffect(() => {
-    let filteredPlugins: DraftPlugin[] = props.plugins
-    if (name !== '') {
-      filteredPlugins = filteredPlugins.filter((plugin: DraftPlugin) =>
-        plugin.name.toLowerCase().includes(name.toLowerCase()),
-      )
-    }
-
-    if (status !== '') {
-      filteredPlugins = filteredPlugins.filter(
-        (plugin: DraftPlugin) => plugin.status === status,
-      )
-    }
-
-    setPluginList(filteredPlugins)
-  }, [name, status])
-
   if (!data) return null
 
   return (
@@ -54,7 +32,7 @@ export default function FirstPost(
       <Link href="../">
         <button>Back</button>
       </Link>
-      <PluginsList plugins={pluginList} />
+      <PluginsList plugins={props.plugins} />
     </div>
   )
 }

@@ -14,7 +14,7 @@ class Developers {
   @Get()
   async getLimitedDeveloperList(
     @Query('limit', ParseNumberPipe({ nullable: true })) limit: number,
-    @Query('offset', ParseNumberPipe({ nullable: true })) offset?: number,
+    @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
     if (!limit) {
       return {
@@ -23,7 +23,8 @@ class Developers {
       }
     }
 
-    offset = offset ? offset : 0
+    page = page ? page : 1
+    const offset = (page - 1) * limit
     const developerCount = await prisma.developerUser.count()
 
     if (offset >= developerCount) {
@@ -37,7 +38,7 @@ class Developers {
         skip: offset,
         take: limit,
       }),
-      pagination: undefined,
+      pagination: { pages, currentPage: page, pageSize: limit },
     }
   }
 

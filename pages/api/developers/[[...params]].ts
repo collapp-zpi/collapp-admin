@@ -3,15 +3,43 @@ import {
   Get,
   Param,
   NotFoundException,
+  Query,
+  ParseNumberPipe,
 } from '@storyofams/next-api-decorators'
-import { prisma } from '../../../config/PrismaClient'
-import { NextAuthGuard } from '../../../shared/utils/apiDecorators'
+import { prisma } from 'shared/utils/prismaClient'
+import { NextAuthGuard } from 'shared/utils/apiDecorators'
 
 @NextAuthGuard()
 class Developers {
   @Get()
-  getDeveloperList() {
-    return prisma.developerUser.findMany()
+  async getDeveloperList(
+    @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
+    @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
+  ) {
+    if (!limit) {
+      return {
+        developers: await prisma.developerUser.findMany(),
+        pagination: null,
+      }
+    }
+
+    page = page ? page : 1
+    const offset = (page - 1) * limit
+    const developerCount = await prisma.developerUser.count()
+
+    if (offset >= developerCount) {
+      throw new NotFoundException('There is not enough developers')
+    }
+
+    const pages = Math.ceil(developerCount / limit)
+
+    return {
+      developers: await prisma.developerUser.findMany({
+        skip: offset,
+        take: limit,
+      }),
+      pagination: { pages, page, limit },
+    }
   }
 
   @Get('/:id')

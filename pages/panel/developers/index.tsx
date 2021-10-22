@@ -2,7 +2,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
-import DevelopersList from '../../../components/DevelopersList'
+import DevelopersList from 'components/DevelopersList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
@@ -13,10 +13,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
-  const developers = await res.json()
-
+  const { developers, pagination } = await res.json()
   return {
-    props: { developers },
+    props: { developers, pagination },
   }
 }
 

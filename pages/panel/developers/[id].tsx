@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
-import PluginsList from '../../../components/PluginsList'
+import PluginsList from 'components/PluginsList'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query

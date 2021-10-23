@@ -2,10 +2,11 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import PluginsList from 'components/PluginsList'
+import ErrorPage from 'components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
-  const developer = await fetch(
+  const developerRes = await fetch(
     `${process.env.BASE_URL}/api/developers/${id}`,
     {
       method: 'GET',
@@ -17,7 +18,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   )
 
-  const plugins = await fetch(
+  let isError = !developerRes.ok
+
+  if (isError) {
+    return { props: { error: await developerRes.json(), isError } }
+  }
+
+  const pluginsRes = await fetch(
     `${process.env.BASE_URL}/api/developers/${id}/plugins`,
     {
       method: 'GET',
@@ -29,19 +36,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   )
 
+  isError = !pluginsRes.ok
+  if (isError) {
+    return { props: { error: await pluginsRes.json(), isError } }
+  }
+
   return {
     props: {
-      developer: await developer.json(),
-      plugins: await plugins.json(),
+      developer: await developerRes.json(),
+      plugins: await pluginsRes.json(),
+      isError,
     },
   }
 }
 
-const Developer = ({
-  developer,
-  plugins,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { image, name, email } = developer
+const Developer = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  if (props.isError) {
+    return <ErrorPage {...props.error}></ErrorPage>
+  }
+
+  const { image, name, email } = props.developer
 
   return (
     <>
@@ -55,8 +71,8 @@ const Developer = ({
         <h1>{name}</h1>
         <p>{email}</p>
         <hr />
-        {plugins.length ? (
-          <PluginsList plugins={plugins}></PluginsList>
+        {props.plugins.length ? (
+          <PluginsList plugins={props.plugins}></PluginsList>
         ) : (
           <p>Developers hasn't created any plugins yet</p>
         )}

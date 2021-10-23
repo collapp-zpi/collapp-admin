@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 import PluginsList from 'components/PluginsList'
+import ErrorPage from 'components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -13,19 +13,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
+  const isError = !res.ok
+
+  if (isError) {
+    return {
+      props: {
+        error: await res.json(),
+        isError,
+      },
+    }
+  }
+
   const { plugins, pagination } = await res.json()
 
   return {
-    props: { plugins, pagination, isError: !res.ok },
+    props: { plugins, pagination, isError },
   }
 }
 
 export default function Plugins(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const { data } = useSession()
-
-  if (!data) return null
+  if (props.isError) {
+    return <ErrorPage {...props.error}></ErrorPage>
+  }
 
   return (
     <div>

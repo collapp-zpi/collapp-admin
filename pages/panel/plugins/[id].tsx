@@ -16,6 +16,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   })
 
+  const isError = !res.ok
+
+  if (isError) {
+    return { props: { error: await res.json(), isError } }
+  }
+
   return {
     props: {
       plugin: await res.json(),
@@ -24,23 +30,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const Plugin = ({
-  plugin,
-  isError,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { name, description } = plugin
-  const [visible, setVisible] = useState(false)
-
-  if (isError) {
-    return <ErrorPage {...plugin}></ErrorPage>
+const Plugin = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  if (props.isError) {
+    return <ErrorPage {...props.error}></ErrorPage>
   }
+
+  const { name, description } = props.plugin
+  const [visible, setVisible] = useState(false)
 
   return (
     <div>
       <Link href="../plugins">
         <button>Plugin list</button>
       </Link>
-      <Link href={`/panel/developers/${plugin.authorId}`}>
+      <Link href={`/panel/developers/${props.plugin.authorId}`}>
         <button>Developer</button>
       </Link>
       <h1>{name}</h1>

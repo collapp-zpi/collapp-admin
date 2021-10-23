@@ -1,8 +1,9 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
+import ErrorPage from 'components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -14,18 +15,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
+
   return {
     props: {
       plugin: await res.json(),
+      isError: !res.ok,
     },
   }
 }
 
 const Plugin = ({
   plugin,
+  isError,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { name, description } = plugin
   const [visible, setVisible] = useState(false)
+
+  if (isError) {
+    return <ErrorPage {...plugin}></ErrorPage>
+  }
 
   return (
     <div>

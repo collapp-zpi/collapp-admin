@@ -16,11 +16,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { plugins, pagination } = await res.json()
 
   return {
-    props: { plugins, pagination },
+    props: { plugins, pagination, isError: !res.ok },
   }
 }
 
-export default function FirstPost(
+export default function Plugins(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const { data } = useSession()

@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default function FirstPost(
+export default function Developers(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const { data } = useSession()

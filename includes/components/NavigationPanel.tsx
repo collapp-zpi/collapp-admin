@@ -1,4 +1,5 @@
 import { signOut } from 'next-auth/react'
+import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
 import React, { ReactNode } from 'react'
 import Button from 'shared/components/button/Button'
@@ -26,7 +27,13 @@ const NavigationPanel = ({ children }: { children: ReactNode }) => {
           </h1>
         </div>
 
-        <Button className="ml-auto mr-0.5" onClick={() => signOut()}>
+        <Button
+          className="ml-auto mr-0.5"
+          onClick={() => {
+            toast.success('Until next time!')
+            setTimeout(() => signOut(), 2000)
+          }}
+        >
           <VscSignOut className="mr-1" />
           Sign out
         </Button>

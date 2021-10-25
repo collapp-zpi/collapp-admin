@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react'
 import React, { ReactNode } from 'react'
-import Loading from './Loading'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
 import NavigationPanel from './NavigationPanel'
 import SignIn from './SignIn'
 
@@ -8,7 +8,7 @@ const LoadingSessionLayout = ({ children }: { children: ReactNode }) => {
   const { status } = useSession()
 
   if (status === 'loading') {
-    return <Loading />
+    return <LogoSpinner />
   }
 
   if (status === 'unauthenticated') {

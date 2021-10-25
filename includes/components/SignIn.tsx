@@ -7,6 +7,7 @@ import { InputText } from '../../shared/components/input/InputText'
 import { MdAlternateEmail } from 'react-icons/md'
 import { signIn } from 'next-auth/react'
 import { RedirectableProviderType } from 'next-auth/providers'
+import Image from 'next/image'
 
 const schema = object().shape({
   email: string().email().required(),
@@ -30,18 +31,20 @@ const query = async ({ email }: { email: string }) => {
 
 const SignIn = () => (
   <div className="flex justify-center align-middle h-full min-h-screen">
-    <UncontrolledForm
-      {...{ schema, query, onSuccess, onError }}
-      className="m-auto"
-    >
-      <InputText
-        type="email"
-        name="email"
-        label="Email"
-        icon={MdAlternateEmail}
-      />
-      <SubmitButton className="ml-auto mr-auto" />
-    </UncontrolledForm>
+    <div className="shadow-xl m-auto">
+      <UncontrolledForm
+        {...{ schema, query, onSuccess, onError }}
+        className="flex"
+      >
+        <InputText
+          type="email"
+          name="email"
+          label="Email"
+          icon={MdAlternateEmail}
+        />
+        <SubmitButton className="ml-auto mr-auto" />
+      </UncontrolledForm>
+    </div>
   </div>
 )
 

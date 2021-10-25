@@ -8,7 +8,11 @@ const LoadingSessionLayout = ({ children }: { children: ReactNode }) => {
   const { status } = useSession()
 
   if (status === 'loading') {
-    return <LogoSpinner />
+    return (
+      <div className="flex justify-center align-middle h-full min-h-screen">
+        <LogoSpinner />
+      </div>
+    )
   }
 
   if (status === 'unauthenticated') {

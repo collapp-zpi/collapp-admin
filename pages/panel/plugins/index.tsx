@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import ErrorPage from 'includes/components/ErrorPage'
+import NavigationPanel from 'includes/components/NavigationPanel'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
@@ -38,11 +39,11 @@ export default function Plugins(
   }
 
   return (
-    <div>
+    <NavigationPanel>
       <Link href="../">
         <button>Back</button>
       </Link>
       <PluginsList plugins={props.plugins} />
-    </div>
+    </NavigationPanel>
   )
 }

@@ -15,10 +15,22 @@ class Plugins {
   async getPluginList(
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
+    @Query('name') name?: string,
+    @Query('status') status?: string,
   ) {
+    console.log(name, status)
+    const nameQuery = name
+      ? { name: { contains: name, mode: 'insensitive' } }
+      : {}
+
+    const statusQuery = status ? { status: { equals: status } } : {}
+    const andQuery = { AND: [nameQuery, statusQuery] }
+
+    console.log(andQuery)
+
     if (!limit) {
       return {
-        plugins: await prisma.draftPlugin.findMany(),
+        plugins: await prisma.draftPlugin.findMany({ where: andQuery }),
         pagination: null,
       }
     }

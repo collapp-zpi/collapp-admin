@@ -1,4 +1,4 @@
-import ErrorPage from 'components/ErrorPage'
+import ErrorPage from 'includes/components/ErrorPage'
 import React from 'react'
 
 export default function Error() {

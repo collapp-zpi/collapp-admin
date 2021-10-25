@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
-import DevelopersList from 'components/DevelopersList'
-import ErrorPage from 'components/ErrorPage'
+import DevelopersList from 'includes/components/DevelopersList'
+import ErrorPage from 'includes/components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
@@ -24,9 +24,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const { developers, pagination } = await res.json()
+  const { entities, pagination } = await res.json()
   return {
-    props: { developers, pagination, isError },
+    props: { developers: entities, pagination, isError },
   }
 }
 

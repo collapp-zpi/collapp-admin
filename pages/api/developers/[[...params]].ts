@@ -8,6 +8,7 @@ import {
 } from '@storyofams/next-api-decorators'
 import { prisma } from 'shared/utils/prismaClient'
 import { NextAuthGuard } from 'shared/utils/apiDecorators'
+import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 
 @NextAuthGuard()
 class Developers {
@@ -16,30 +17,13 @@ class Developers {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
-    if (!limit) {
-      return {
-        developers: await prisma.developerUser.findMany(),
-        pagination: null,
-      }
-    }
-
-    const currPage = page ? page : 1
-    const offset = (currPage - 1) * limit
-    const developerCount = await prisma.developerUser.count()
-
-    if (offset >= developerCount) {
-      throw new NotFoundException('There is not enough developers')
-    }
-
-    const pages = Math.ceil(developerCount / limit)
-
-    return {
-      developers: await prisma.developerUser.findMany({
-        skip: offset,
-        take: limit,
-      }),
-      pagination: { pages, currPage, limit },
-    }
+    return await fetchWithPagination(
+      'developerUser',
+      limit,
+      page,
+      [],
+      'There is not enough developers',
+    )
   }
 
   @Get('/:id')
@@ -63,37 +47,17 @@ class Developers {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
-    if (!limit) {
-      return {
-        plugins: await prisma.draftPlugin.findMany({
-          where: {
-            authorId: id as string,
-          },
-        }),
-        pagination: null,
-      }
-    }
-
-    const currPage = page ? page : 1
-    const offset = (currPage - 1) * limit
-    const pluginCount = await prisma.draftPlugin.count()
-
-    if (offset >= pluginCount) {
-      throw new NotFoundException('There is not enough plugins')
-    }
-
-    const pages = Math.ceil(pluginCount / limit)
-
-    return {
-      plugins: await prisma.draftPlugin.findMany({
-        skip: offset,
-        take: limit,
-        where: {
+    return await fetchWithPagination(
+      'draftPlugin',
+      limit,
+      page,
+      [
+        {
           authorId: id as string,
         },
-      }),
-      pagination: { pages, currPage, limit },
-    }
+      ],
+      'There is not enough plugins',
+    )
   }
 }
 

@@ -1,7 +1,7 @@
-import ErrorPage from 'components/ErrorPage'
+import ErrorPage from 'includes/components/ErrorPage'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { translate } from 'utils/errPageCodesTranslate'
+import { translate } from 'includes/utils/errPageCodesTranslate'
 
 export default function Error() {
   const router = useRouter()

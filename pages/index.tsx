@@ -1,6 +1,6 @@
 import { signOut } from 'next-auth/react'
 import React from 'react'
-import LoadingSessionLayout from '../components/LoadingSession'
+import LoadingSessionLayout from '../includes/components/LoadingSession'
 import Button from '../shared/components/button/Button'
 
 const Home = () => {

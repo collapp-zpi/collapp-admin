@@ -1,6 +1,7 @@
 import { useSession } from 'next-auth/react'
 import React, { ReactNode } from 'react'
 import Loading from './Loading'
+import NavigationPanel from './NavigationPanel'
 import SignIn from './SignIn'
 
 const LoadingSessionLayout = ({ children }: { children: ReactNode }) => {
@@ -14,7 +15,7 @@ const LoadingSessionLayout = ({ children }: { children: ReactNode }) => {
     return <SignIn />
   }
 
-  return <div>{children}</div>
+  return <NavigationPanel>{children}</NavigationPanel>
 }
 
 export default LoadingSessionLayout

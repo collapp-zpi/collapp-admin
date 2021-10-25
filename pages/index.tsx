@@ -7,7 +7,6 @@ const Home = () => {
   return (
     <LoadingSessionLayout>
       <h1>test</h1>
-      <Button onClick={() => signOut()}>Sign out</Button>
     </LoadingSessionLayout>
   )
 }

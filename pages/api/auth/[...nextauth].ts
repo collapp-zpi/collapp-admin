@@ -19,7 +19,7 @@ export default NextAuth({
   ],
   pages: {
     signIn: '../../',
-    error: '../../error',
+    error: '../../authError',
     signOut: '../../',
     verifyRequest: '../../',
     newUser: '../../',

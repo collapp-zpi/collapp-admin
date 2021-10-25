@@ -1,6 +1,7 @@
 import ErrorPage from 'components/ErrorPage'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { translate } from 'utils/errPageCodesTranslate'
 
 export default function Error() {
   const router = useRouter()
@@ -13,5 +14,5 @@ export default function Error() {
     msg = error
   }
 
-  return <ErrorPage statusCode={401} message={msg}></ErrorPage>
+  return <ErrorPage statusCode={401} message={translate(msg)}></ErrorPage>
 }

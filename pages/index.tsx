@@ -1,12 +1,11 @@
-import { signOut } from 'next-auth/react'
+import HomePage from 'includes/components/HomePage'
 import React from 'react'
 import LoadingSessionLayout from '../includes/components/LoadingSession'
-import Button from '../shared/components/button/Button'
 
 const Home = () => {
   return (
     <LoadingSessionLayout>
-      <h1>test</h1>
+      <HomePage></HomePage>
     </LoadingSessionLayout>
   )
 }

@@ -38,7 +38,9 @@ const NavigationPanel = ({ children }: { children: ReactNode }) => {
           Sign out
         </Button>
       </div>
-      <div className="flex-grow bg-gray-100">{children}</div>
+      <div className="flex justify-center items-center flex-grow bg-gray-100">
+        {children}
+      </div>
     </div>
   )
 }

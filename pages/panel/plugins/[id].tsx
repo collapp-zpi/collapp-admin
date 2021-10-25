@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
+import ErrorPage from 'components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -14,17 +15,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
+
+  const isError = !res.ok
+
+  if (isError) {
+    return { props: { error: await res.json(), isError } }
+  }
+
   return {
     props: {
       plugin: await res.json(),
+      isError: !res.ok,
     },
   }
 }
 
-const Plugin = ({
-  plugin,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { name, description } = plugin
+const Plugin = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  if (props.isError) {
+    return <ErrorPage {...props.error}></ErrorPage>
+  }
+
+  const { name, description } = props.plugin
   const [visible, setVisible] = useState(false)
 
   return (
@@ -32,7 +45,7 @@ const Plugin = ({
       <Link href="../plugins">
         <button>Plugin list</button>
       </Link>
-      <Link href={`/panel/developers/${plugin.authorId}`}>
+      <Link href={`/panel/developers/${props.plugin.authorId}`}>
         <button>Developer</button>
       </Link>
       <h1>{name}</h1>

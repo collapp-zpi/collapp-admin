@@ -23,8 +23,8 @@ class Developers {
       }
     }
 
-    page = page ? page : 1
-    const offset = (page - 1) * limit
+    const currPage = page ? page : 1
+    const offset = (currPage - 1) * limit
     const developerCount = await prisma.developerUser.count()
 
     if (offset >= developerCount) {
@@ -38,7 +38,7 @@ class Developers {
         skip: offset,
         take: limit,
       }),
-      pagination: { pages, page, limit },
+      pagination: { pages, currPage, limit },
     }
   }
 
@@ -58,12 +58,42 @@ class Developers {
   }
 
   @Get('/:id/plugins')
-  getDeveloperPlugins(@Param('id') id: string) {
-    return prisma.draftPlugin.findMany({
-      where: {
-        authorId: id as string,
-      },
-    })
+  async getDeveloperPlugins(
+    @Param('id') id: string,
+    @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
+    @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
+  ) {
+    if (!limit) {
+      return {
+        plugins: await prisma.draftPlugin.findMany({
+          where: {
+            authorId: id as string,
+          },
+        }),
+        pagination: null,
+      }
+    }
+
+    const currPage = page ? page : 1
+    const offset = (currPage - 1) * limit
+    const pluginCount = await prisma.draftPlugin.count()
+
+    if (offset >= pluginCount) {
+      throw new NotFoundException('There is not enough plugins')
+    }
+
+    const pages = Math.ceil(pluginCount / limit)
+
+    return {
+      plugins: await prisma.draftPlugin.findMany({
+        skip: offset,
+        take: limit,
+        where: {
+          authorId: id as string,
+        },
+      }),
+      pagination: { pages, currPage, limit },
+    }
   }
 }
 

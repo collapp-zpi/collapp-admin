@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 import DevelopersList from 'components/DevelopersList'
+import ErrorPage from 'components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
@@ -13,18 +13,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
+  const isError = !res.ok
+
+  if (isError) {
+    return {
+      props: {
+        error: await res.json(),
+        isError,
+      },
+    }
+  }
+
   const { developers, pagination } = await res.json()
   return {
-    props: { developers, pagination },
+    props: { developers, pagination, isError },
   }
 }
 
-export default function FirstPost(
+export default function Developers(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const { data } = useSession()
-
-  if (!data) return null
+  if (props.isError) {
+    return <ErrorPage {...props.error}></ErrorPage>
+  }
 
   return (
     <div>

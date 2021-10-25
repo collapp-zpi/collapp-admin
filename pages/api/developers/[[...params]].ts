@@ -23,8 +23,8 @@ class Developers {
       }
     }
 
-    page = page ? page : 1
-    const offset = (page - 1) * limit
+    const currPage = page ? page : 1
+    const offset = (currPage - 1) * limit
     const developerCount = await prisma.developerUser.count()
 
     if (offset >= developerCount) {
@@ -38,7 +38,7 @@ class Developers {
         skip: offset,
         take: limit,
       }),
-      pagination: { pages, page, limit },
+      pagination: { pages, currPage, limit },
     }
   }
 
@@ -74,8 +74,8 @@ class Developers {
       }
     }
 
-    page = page ? page : 1
-    const offset = (page - 1) * limit
+    const currPage = page ? page : 1
+    const offset = (currPage - 1) * limit
     const pluginCount = await prisma.draftPlugin.count()
 
     if (offset >= pluginCount) {
@@ -92,7 +92,7 @@ class Developers {
           authorId: id as string,
         },
       }),
-      pagination: { pages, page, limit },
+      pagination: { pages, currPage, limit },
     }
   }
 }

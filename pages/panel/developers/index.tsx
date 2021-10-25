@@ -24,9 +24,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const { developers, pagination } = await res.json()
+  const { entities, pagination } = await res.json()
   return {
-    props: { developers, pagination, isError },
+    props: { developers: entities, pagination, isError },
   }
 }
 

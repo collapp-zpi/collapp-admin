@@ -24,9 +24,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const { plugins, pagination } = await res.json()
+  const { entities, pagination } = await res.json()
   return {
-    props: { plugins, pagination, isError },
+    props: { plugins: entities, pagination, isError },
   }
 }
 

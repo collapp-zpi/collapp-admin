@@ -22,7 +22,6 @@ class Plugins {
     const nameQuery = name
       ? { name: { contains: name, mode: 'insensitive' } }
       : {}
-
     const statusQuery = status ? { status: { equals: status } } : {}
     return await fetchWithPagination(
       'draftPlugin',

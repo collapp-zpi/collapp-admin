@@ -17,7 +17,7 @@ class Developers {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
-    fetchWithPagination(
+    return await fetchWithPagination(
       'developerUser',
       limit,
       page,
@@ -47,7 +47,7 @@ class Developers {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
-    fetchWithPagination(
+    return await fetchWithPagination(
       'draftPlugin',
       limit,
       page,

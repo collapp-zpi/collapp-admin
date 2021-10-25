@@ -11,16 +11,18 @@ export interface InputGeneric {
 }
 
 interface InputFrameProps {
-  name: string
+  name?: string
   className?: string
   icon?: IconType
   children: ReactNode
   isError: boolean
+  overflow?: boolean
 }
 
 export const InputFrame = ({
   name,
   className,
+  overflow = false,
   icon: Icon,
   children,
   isError,
@@ -34,6 +36,7 @@ export const InputFrame = ({
             'border-red-300': isError,
             'border-gray-200': !isError,
           },
+          !overflow && 'overflow-hidden',
         )}
       >
         {!!Icon && (
@@ -43,9 +46,11 @@ export const InputFrame = ({
         )}
         <div className="relative flex-grow flex">{children}</div>
       </div>
-      <div className="text-red-400 ml-1 mt-0.5 text-sm">
-        <ErrorMessage name={name} />
-      </div>
+      {!!name && (
+        <div className="text-red-400 ml-1 mt-0.5 text-sm">
+          <ErrorMessage name={name} />
+        </div>
+      )}
     </label>
   </div>
 )

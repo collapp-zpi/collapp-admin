@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
-import PluginsList from 'components/PluginsList'
-import ErrorPage from 'components/ErrorPage'
+import PluginsList from 'includes/components/PluginsList'
+import ErrorPage from 'includes/components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {

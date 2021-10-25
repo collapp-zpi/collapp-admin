@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
-import ErrorPage from 'components/ErrorPage'
+import ErrorPage from 'includes/components/ErrorPage'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -52,7 +52,7 @@ const Plugin = (
       <p>{description}</p>
       <button>Download</button>
       <Button onClick={() => setVisible(true)}>Modal</Button>
-      <Modal visible={visible} isVisible={setVisible}>
+      <Modal visible={visible}>
         <h1>What to do?</h1>
         <button
           type="button"

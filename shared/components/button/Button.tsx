@@ -6,7 +6,7 @@ const BUTTON_COLORS = {
   red: 'bg-red-500 hover:bg-red-600 focus:bg-red-600 text-white shadow-md',
   light: 'bg-gray-800 bg-opacity-5 hover:bg-opacity-20 focus:bg-opacity-20',
   'red-link':
-    'bg-red-500 text-red-500 bg-opacity-0 hover:bg-opacity-20 focus:bg-opacity-20',
+    'bg-red-500 text-red-500 bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20',
 }
 
 export interface ButtonProps extends ComponentProps<'button'> {
@@ -23,7 +23,7 @@ const Button = ({
 }: ButtonProps) => (
   <button
     className={classNames(
-      'py-2 px-6 font-bold rounded-lg transition-colors transition-opacity flex items-center disabled:opacity-50',
+      'py-2 px-6 font-bold rounded-lg transition-all flex justify-center items-center disabled:opacity-50',
       BUTTON_COLORS[color],
       className,
       disabled && 'pointer-events-none',

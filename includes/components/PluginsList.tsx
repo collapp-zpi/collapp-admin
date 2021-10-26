@@ -9,7 +9,6 @@ const PluginsList = ({ plugins }: { plugins: DraftPlugin[] }) => (
         <tr>
           <th></th>
           <th>Name</th>
-          <th>Date</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -21,7 +20,6 @@ const PluginsList = ({ plugins }: { plugins: DraftPlugin[] }) => (
                 <img src={plugin.icon || ''} alt="" />
               </td>
               <td>{plugin.name}</td>
-              <td>{plugin.date}</td>
               <td>{plugin.status}</td>
             </tr>
           </Link>

@@ -1,20 +1,25 @@
 import { useSession } from 'next-auth/react'
 import React, { ReactNode } from 'react'
-import Loading from './Loading'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
+import NavigationPanel from './NavigationPanel'
 import SignIn from './SignIn'
 
 const LoadingSessionLayout = ({ children }: { children: ReactNode }) => {
   const { status } = useSession()
 
   if (status === 'loading') {
-    return <Loading />
+    return (
+      <div className="flex justify-center align-middle h-full min-h-screen">
+        <LogoSpinner />
+      </div>
+    )
   }
 
   if (status === 'unauthenticated') {
     return <SignIn />
   }
 
-  return <div>{children}</div>
+  return <NavigationPanel>{children}</NavigationPanel>
 }
 
 export default LoadingSessionLayout

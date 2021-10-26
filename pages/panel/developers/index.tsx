@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import DevelopersList from 'includes/components/DevelopersList'
 import ErrorPage from 'includes/components/ErrorPage'
+import NavigationPanel from 'includes/components/NavigationPanel'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
@@ -38,11 +39,11 @@ export default function Developers(
   }
 
   return (
-    <div>
+    <NavigationPanel>
       <Link href="../">
         <button>Back</button>
       </Link>
       <DevelopersList developers={props.developers} />
-    </div>
+    </NavigationPanel>
   )
 }

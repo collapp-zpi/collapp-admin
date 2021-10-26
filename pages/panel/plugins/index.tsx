@@ -44,17 +44,22 @@ export default function Plugins(
   }
   const router = useRouter()
   const [pageNum, setPageNum] = useState(1)
-  const [limit, setLimit] = useState(2)
+  const [limit, setLimit] = useState(3)
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
   useEffect(() => {
-    let readPageNum = router.query.page ? router.query.page : '1'
+    let readPageNum = router.query.page ? router.query.page : `${pageNum}`
     if (Array.isArray(readPageNum)) {
       readPageNum = readPageNum[0]
     }
     setPageNum(parseInt(readPageNum, 10))
-    console.log(router.query.limit)
+
+    let readLimit = router.query.limit ? router.query.limit : `${limit}`
+    if (Array.isArray(readLimit)) {
+      readLimit = readLimit[0]
+    }
+    setLimit(parseInt(readLimit, 10))
   }, [])
 
   const pushWithQuery = (page: number) => {

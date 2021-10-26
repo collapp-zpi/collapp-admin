@@ -28,6 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   }
+  console.log('Static')
 
   const { entities, pagination } = await res.json()
   return {
@@ -43,7 +44,7 @@ export default function Plugins(
   }
   const router = useRouter()
   const [pageNum, setPageNum] = useState(1)
-  const [limit, setLimit] = useState(1)
+  const [limit, setLimit] = useState(2)
 
   const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
@@ -59,7 +60,9 @@ export default function Plugins(
   const pushWithQuery = (page: number) => {
     router.query.page = `${page}`
     setPageNum(page)
-    router.push(`plugins?limit=${limit}&page=${pageNum}`)
+    router.push(`plugins?limit=${limit}&page=${page}`, undefined, {
+      shallow: true,
+    })
   }
 
   const { data } = useSWR(

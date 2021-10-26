@@ -59,7 +59,7 @@ const SignIn = () => {
               label="Email"
               icon={MdAlternateEmail}
             />
-            <SubmitButton />
+            <SubmitButton className="h-12" />
           </UncontrolledForm>
         )}
       </div>

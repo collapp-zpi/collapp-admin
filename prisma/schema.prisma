@@ -11,11 +11,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model File {
+  id                 String               @id @default(cuid())
+  name               String
+  date               DateTime             @default(now())
+  size               Int
+  url                String
 
-enum PluginStatus {
-  Private
-  Rejected
-  Pending
+  draft              DraftPlugin?         @relation(fields: [draftId], references: [id])
+  draftId            String?
+
+  published          PublishedPlugin?     @relation(fields: [publishedId], references: [id])
+  publishedId        String?
 }
 
 model DraftPlugin {
@@ -24,9 +31,10 @@ model DraftPlugin {
   description String
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @default(now())
-  status      PluginStatus     @default(Private)
-  source      String?
+  isPending   Boolean          @default(false)
   icon        String?
+
+  source      File?
 
   authorId    String
   author      DeveloperUser    @relation(fields: [authorId], references: [id])
@@ -45,8 +53,9 @@ model PublishedPlugin {
   description String
   version     Int              @default(1)
   updatedAt   DateTime         @default(now())
-  isPublic    Boolean          @default(true)
   icon        String?
+
+  source      File?
 
   authorId    String
   author      DeveloperUser    @relation(fields: [authorId], references: [id])

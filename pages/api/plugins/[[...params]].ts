@@ -17,16 +17,11 @@ class Plugins {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
     @Query('name') name?: string,
-    @Query('status') status?: string,
+    // @Query('status') status?: string, // TODO: filter by status
   ) {
-    const nameQuery = name
-      ? { name: { contains: name, mode: 'insensitive' } }
-      : {}
-    const statusQuery = status ? { status: { equals: status } } : {}
-    return await fetchWithPagination('draftPlugin', limit, page, [
-      nameQuery,
-      statusQuery,
-    ])
+    return await fetchWithPagination('draftPlugin', limit, page, {
+      ...(name && { name: { contains: name, mode: 'insensitive' } }),
+    })
   }
 
   @Get('/:id')

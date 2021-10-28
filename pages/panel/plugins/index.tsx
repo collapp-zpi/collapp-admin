@@ -9,9 +9,18 @@ import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { generateKey, objectPick } from 'shared/utils/object'
 import ErrorPage from 'includes/components/ErrorPage'
 import { useQuery } from 'shared/hooks/useQuery'
+import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
+import { object, string } from 'yup'
+import { InputText } from 'shared/components/input/InputText'
+import SubmitButton from 'shared/components/button/SubmitButton'
+import { useRouter } from 'next/router'
+
+const schema = object().shape({
+  name: string().default(''),
+})
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const params = objectPick(context.query, ['limit', 'page'])
+  const params = objectPick(context.query, ['limit', 'page', 'name'])
   const search = new URLSearchParams(params)
 
   const res = await fetch(`${process.env.BASE_URL}/api/plugins?${search}`, {
@@ -45,35 +54,40 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 function Plugins(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const router = useRouter()
+  const [, setFilters] = useFilters()
+  const { data } = useQuery('plugins', '../api/plugins')
+
   if (props.isError) {
     return <ErrorPage {...props.error} />
   }
-  const [, setFilters] = useFilters()
-  const { data } = useQuery('plugins', '../api/plugins')
-  // console.log(data)
-
-  if (!data)
-    return (
-      <NavigationPanel>
-        <LogoSpinner />
-      </NavigationPanel>
-    )
-
-  const { entities, pagination } = data
 
   return (
     <NavigationPanel>
       <Link href="../">
         <button>Back</button>
       </Link>
-      <PluginsList plugins={entities} />
-      <Pagination
-        page={pagination.page}
-        pages={pagination.pages}
-        setPage={(page) => setFilters({ page })}
-      />
+      <UncontrolledForm
+        schema={schema}
+        query={setFilters}
+        initial={objectPick(router.query, ['name'])}
+      >
+        <InputText name="name" label="Plugin name" />
+        <SubmitButton />
+      </UncontrolledForm>
+      {!data && <LogoSpinner />}
+      {!!data && (
+        <>
+          <PluginsList plugins={data?.entities} />
+          <Pagination
+            page={data?.pagination.page}
+            pages={data?.pagination.pages}
+            setPage={(page) => setFilters({ page })}
+          />
+        </>
+      )}
     </NavigationPanel>
   )
 }
 
-export default withFilters(Plugins, ['limit', 'page'])
+export default withFilters(Plugins, ['limit', 'page', 'name'])

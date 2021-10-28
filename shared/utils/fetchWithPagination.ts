@@ -5,16 +5,17 @@ export async function fetchWithPagination(
   entityName: string,
   _limit?: number,
   _page?: number,
-  whereQuery: any[],
+  where?: { [key: string]: any },
 ) {
   const limit = (_limit && Number(_limit)) || 20
   const page = (_page && Number(_page)) || 1
-  const andQuery = { AND: whereQuery }
 
   console.log('test pag', limit, page)
 
   const offset = (page - 1) * limit
-  const entityCount = await prisma[entityName].count()
+  const entityCount = await prisma[entityName].count({
+    ...(where && { where }),
+  })
 
   const pages = Math.ceil(entityCount / limit)
 
@@ -22,7 +23,7 @@ export async function fetchWithPagination(
     entities: await prisma[entityName].findMany({
       skip: offset,
       take: limit,
-      where: andQuery,
+      ...(where && { where }),
     }),
     pagination: { pages, page, limit },
   }

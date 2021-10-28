@@ -13,6 +13,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^4.33.0
   autoprefixer: ^10.3.7
   babel-plugin-parameter-decorator: ^1.0.16
+  babel-plugin-styled-components: ^1.13.3
   babel-plugin-transform-typescript-metadata: ^0.3.2
   classnames: ^2.3.1
   eslint: 7.32.0
@@ -69,6 +70,7 @@ devDependencies:
   '@types/styled-components': 5.1.15
   '@typescript-eslint/eslint-plugin': 4.33.0_eslint@7.32.0+typescript@4.4.3
   autoprefixer: 10.3.7_postcss@8.3.9
+  babel-plugin-styled-components: 1.13.3_styled-components@5.3.1
   eslint: 7.32.0
   eslint-config-next: 11.1.2_82ad98da5e129ae9d310451a179848d9
   eslint-config-prettier: 8.3.0_eslint@7.32.0
@@ -133,7 +135,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.15.6
-    dev: false
 
   /@babel/helper-compilation-targets/7.15.4_@babel+core@7.15.8:
     resolution: {integrity: sha512-rMWPCirulnPSe4d+gwdWXLfAXTTBj8M3guAf5xFQJ0nvFY7tfNAFnWdqaHegHlgDZOCT4qvhF3BYlSJag8yhqQ==}
@@ -200,7 +201,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/types': 7.15.6
-    dev: false
 
   /@babel/helper-module-transforms/7.15.8:
     resolution: {integrity: sha512-DfAfA6PfpG8t4S6npwzLvTUpp0sS7JrcuaMiy1Y5645laRJIp/LiLGIBbQKaXSInK8tiGNI7FL7L8UvB8gdUZg==}
@@ -402,7 +402,6 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': 7.15.7
       to-fast-properties: 2.0.0
-    dev: false
 
   /@emotion/cache/11.5.0:
     resolution: {integrity: sha512-mAZ5QRpLriBtaj/k2qyrXwck6yeoz1V5lMt/jfj6igWU35yYlNKs2LziXVgvH81gnJZ+9QQNGelSsnuoAy6uIw==}
@@ -1179,11 +1178,9 @@ packages:
       babel-plugin-syntax-jsx: 6.18.0
       lodash: 4.17.21
       styled-components: 5.3.1_react-dom@17.0.2+react@17.0.2
-    dev: false
 
   /babel-plugin-syntax-jsx/6.18.0:
     resolution: {integrity: sha1-CvMqmm4Tyno/1QaeYtew9Y0NiUY=}
-    dev: false
 
   /babel-plugin-transform-typescript-metadata/0.3.2:
     resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
@@ -4548,7 +4545,6 @@ packages:
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=}
     engines: {node: '>=4'}
-    dev: false
 
   /to-regex-range/5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}

@@ -12,8 +12,8 @@ import { useQuery } from 'shared/hooks/useQuery'
 import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
 import { object, string } from 'yup'
 import { InputText } from 'shared/components/input/InputText'
-import SubmitButton from 'shared/components/button/SubmitButton'
 import { useRouter } from 'next/router'
+import { AutoSubmit } from 'shared/components/form/AutoSubmit'
 
 const schema = object().shape({
   name: string().default(''),
@@ -73,7 +73,7 @@ function Plugins(
         initial={objectPick(router.query, ['name'])}
       >
         <InputText name="name" label="Plugin name" />
-        <SubmitButton />
+        <AutoSubmit />
       </UncontrolledForm>
       {!data && <LogoSpinner />}
       {!!data && (

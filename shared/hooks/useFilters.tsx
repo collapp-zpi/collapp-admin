@@ -56,6 +56,7 @@ export const FilterProvider = ({
       }
     }
 
+    setInnerFilters(updated)
     if (hasPathChanged) {
       return router.push(
         {
@@ -66,7 +67,6 @@ export const FilterProvider = ({
         { shallow: true },
       )
     }
-    setInnerFilters(updated)
   }
 
   return (

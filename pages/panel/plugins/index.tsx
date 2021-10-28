@@ -1,16 +1,16 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
-import ErrorPage from 'includes/components/ErrorPage'
 import NavigationPanel from 'includes/components/NavigationPanel'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import useSWR from 'swr'
 import { Pagination } from 'shared/components/Pagination'
-import { useRouter } from 'next/router'
+import { useFilters, withFilters } from 'shared/hooks/useFilters'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/plugins`, {
+  const search = new URLSearchParams(context.query)
+  const res = await fetch(`${process.env.BASE_URL}/api/plugins?${search}`, {
     method: 'GET',
     headers: {
       ...(context?.req?.headers?.cookie && {
@@ -30,50 +30,43 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   console.log('Static')
 
-  const { entities, pagination } = await res.json()
   return {
-    props: { plugins: entities, pagination, isError },
+    props: {
+      fallback: await res.json(),
+      isError,
+    },
   }
 }
 
-export default function Plugins(
+const useQuery = (key: string[] | string, path: string) => {
+  const [filters] = useFilters()
+  const filteredSearch = Object.entries(filters).reduce(
+    (acc, [key, value]) =>
+      value == null
+        ? acc
+        : {
+            ...acc,
+            [key]: value,
+          },
+    {},
+  )
+  const search = new URLSearchParams(filteredSearch)
+
+  return useSWR(
+    [...(Array.isArray(key) ? key : [key]), JSON.stringify(filters)],
+    () => fetch(`${path}?` + search).then((res) => res.json()),
+  )
+}
+
+function Plugins(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  if (props.isError) {
-    return <ErrorPage {...props.error}></ErrorPage>
-  }
-  const router = useRouter()
-  const [pageNum, setPageNum] = useState(1)
-  const [limit, setLimit] = useState(3)
-
-  const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
-  useEffect(() => {
-    let readPageNum = router.query.page ? router.query.page : `${pageNum}`
-    if (Array.isArray(readPageNum)) {
-      readPageNum = readPageNum[0]
-    }
-    setPageNum(parseInt(readPageNum, 10))
-
-    let readLimit = router.query.limit ? router.query.limit : `${limit}`
-    if (Array.isArray(readLimit)) {
-      readLimit = readLimit[0]
-    }
-    setLimit(parseInt(readLimit, 10))
-  }, [])
-
-  const pushWithQuery = (page: number) => {
-    router.query.page = `${page}`
-    setPageNum(page)
-    router.push(`plugins?limit=${limit}&page=${page}`, undefined, {
-      shallow: true,
-    })
-  }
-
-  const { data } = useSWR(
-    `../api/plugins?limit=${limit}&page=${pageNum}`,
-    fetcher,
-  )
+  // if (props.isError) {
+  //   return <ErrorPage {...props.error}></ErrorPage>
+  // }
+  const [, setFilters] = useFilters()
+  const { data } = useQuery('plugins', '../api/plugins')
+  // console.log(data)
 
   if (!data)
     return (
@@ -91,10 +84,12 @@ export default function Plugins(
       </Link>
       <PluginsList plugins={entities} />
       <Pagination
-        page={pageNum}
+        page={pagination.page}
         pages={pagination.pages}
-        setPage={pushWithQuery}
-      ></Pagination>
+        setPage={(page) => setFilters({ page })}
+      />
     </NavigationPanel>
   )
 }
+
+export default withFilters(Plugins, ['limit', 'page'])

@@ -1,30 +1,20 @@
 //@ts-nocheck
-import { NotFoundException } from '@storyofams/next-api-decorators'
 import { prisma } from 'shared/utils/prismaClient'
 
 export async function fetchWithPagination(
   entityName: string,
-  limit: number | undefined,
-  page: number | undefined,
+  _limit?: number,
+  _page?: number,
   whereQuery: any[],
-  outOfRangeMessage: string,
 ) {
+  const limit = (_limit && Number(_limit)) || 20
+  const page = (_page && Number(_page)) || 1
   const andQuery = { AND: whereQuery }
 
-  if (!limit) {
-    return {
-      entities: await prisma[entityName].findMany({ where: andQuery }),
-      pagination: null,
-    }
-  }
+  console.log('test pag', limit, page)
 
-  const currPage = page ? page : 1
-  const offset = (currPage - 1) * limit
+  const offset = (page - 1) * limit
   const entityCount = await prisma[entityName].count()
-
-  if (offset >= entityCount) {
-    throw new NotFoundException(outOfRangeMessage)
-  }
 
   const pages = Math.ceil(entityCount / limit)
 
@@ -34,6 +24,6 @@ export async function fetchWithPagination(
       take: limit,
       where: andQuery,
     }),
-    pagination: { pages, currPage, limit },
+    pagination: { pages, page, limit },
   }
 }

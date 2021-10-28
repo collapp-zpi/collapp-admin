@@ -23,21 +23,16 @@ class Plugins {
       ? { name: { contains: name, mode: 'insensitive' } }
       : {}
     const statusQuery = status ? { status: { equals: status } } : {}
-    return await fetchWithPagination(
-      'draftPlugin',
-      limit,
-      page,
-      [nameQuery, statusQuery],
-      'There is not enough plugins',
-    )
+    return await fetchWithPagination('draftPlugin', limit, page, [
+      nameQuery,
+      statusQuery,
+    ])
   }
 
   @Get('/:id')
   async getPlugin(@Param('id') id: string) {
     const plugin = await prisma.draftPlugin.findFirst({
-      where: {
-        id: id as string,
-      },
+      where: { id },
     })
 
     if (!plugin) {

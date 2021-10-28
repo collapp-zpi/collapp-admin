@@ -4,6 +4,7 @@ import {
   createContext,
   ReactNode,
   useContext,
+  useEffect,
   useState,
 } from 'react'
 import { useRouter } from 'next/router'
@@ -24,18 +25,20 @@ export const FilterProvider = ({
   initial = {},
 }: FilterProviderProps) => {
   const router = useRouter()
-  const [filters, setInnerFilters] = useState<FiltersType>(() => {
-    const withPath = { ...initial }
+  const [filters, setInnerFilters] = useState<FiltersType>(initial)
+
+  useEffect(() => {
+    const withPath = { ...filters }
 
     for (const param of inQuery) {
       const current = router.query?.[param]
       if (current) {
         withPath[param] = Array.isArray(current) ? current[0] : current
-      }
+      } else if (withPath[param]) delete withPath[param]
     }
 
-    return withPath
-  })
+    setInnerFilters(withPath)
+  }, [router.asPath])
 
   const setFilters = (newFilters: { [key: string]: string | null } = {}) => {
     const updated = { ...filters }

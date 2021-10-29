@@ -17,13 +17,7 @@ class Developers {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
-    return await fetchWithPagination(
-      'developerUser',
-      limit,
-      page,
-      [],
-      'There is not enough developers',
-    )
+    return await fetchWithPagination('developerUser', limit, page)
   }
 
   @Get('/:id')
@@ -47,17 +41,9 @@ class Developers {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
   ) {
-    return await fetchWithPagination(
-      'draftPlugin',
-      limit,
-      page,
-      [
-        {
-          authorId: id as string,
-        },
-      ],
-      'There is not enough plugins',
-    )
+    return await fetchWithPagination('draftPlugin', limit, page, {
+      authorId: id,
+    })
   }
 }
 

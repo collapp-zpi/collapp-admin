@@ -17,27 +17,17 @@ class Plugins {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
     @Query('name') name?: string,
-    @Query('status') status?: string,
+    // @Query('status') status?: string, // TODO: filter by status
   ) {
-    const nameQuery = name
-      ? { name: { contains: name, mode: 'insensitive' } }
-      : {}
-    const statusQuery = status ? { status: { equals: status } } : {}
-    return await fetchWithPagination(
-      'draftPlugin',
-      limit,
-      page,
-      [nameQuery, statusQuery],
-      'There is not enough plugins',
-    )
+    return await fetchWithPagination('draftPlugin', limit, page, {
+      ...(name && { name: { contains: name, mode: 'insensitive' } }),
+    })
   }
 
   @Get('/:id')
   async getPlugin(@Param('id') id: string) {
     const plugin = await prisma.draftPlugin.findFirst({
-      where: {
-        id: id as string,
-      },
+      where: { id },
     })
 
     if (!plugin) {

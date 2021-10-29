@@ -10,7 +10,9 @@ export const useQuery = (key: string[] | string, path: string) => {
   )
   const search = new URLSearchParams(filteredSearch)
 
+  const origin = typeof window !== 'undefined' ? window.location.origin : ''
+
   return useSWR(generateKey(key, filters), () =>
-    fetch(`${path}?` + search).then((res) => res.json()),
+    fetch(`${origin}${path}?` + search).then((res) => res.json()),
   )
 }

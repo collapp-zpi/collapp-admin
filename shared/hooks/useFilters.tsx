@@ -10,7 +10,9 @@ import {
 import { useRouter } from 'next/router'
 import { SWRConfig } from 'swr'
 
-export const FilterContext = createContext([{}, () => undefined])
+export const FilterContext = createContext<
+  [FiltersType, (filters: FiltersType) => void, string[]]
+>([{}, () => undefined, []])
 
 type FilterProviderProps = {
   children: ReactNode
@@ -24,11 +26,8 @@ export const FilterProvider = ({
   inQuery = [],
   initial = {},
 }: FilterProviderProps) => {
-  const router = useRouter()
-  const [filters, setInnerFilters] = useState<FiltersType>(initial)
-
-  useEffect(() => {
-    const withPath = { ...filters }
+  const getFiltersFromPath = (initial: FiltersType) => {
+    const withPath = { ...initial }
 
     for (const param of inQuery) {
       const current = router.query?.[param]
@@ -37,6 +36,16 @@ export const FilterProvider = ({
       } else if (withPath[param]) delete withPath[param]
     }
 
+    return withPath
+  }
+
+  const router = useRouter()
+  const [filters, setInnerFilters] = useState<FiltersType>(() =>
+    getFiltersFromPath(initial),
+  )
+
+  useEffect(() => {
+    const withPath = getFiltersFromPath(filters)
     setInnerFilters(withPath)
   }, [router.asPath])
 
@@ -61,7 +70,7 @@ export const FilterProvider = ({
 
     setInnerFilters(updated)
     if (hasPathChanged) {
-      return router.push(
+      return router.replace(
         {
           pathname: router.pathname,
           query: router.query,

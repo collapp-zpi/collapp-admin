@@ -1,5 +1,4 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import Link from 'next/link'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import NavigationPanel from 'includes/components/NavigationPanel'
@@ -71,23 +70,25 @@ function Plugins(
         <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
       </FiltersForm>
       {!data && (
-        <div className="m-12">
+        <div className="m-auto">
           <LogoSpinner />
         </div>
       )}
       {!!data && !data.entities?.length && (
-        <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg">
+        <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg m-auto">
           No plugins found
         </div>
       )}
       {!!data && !!data.entities?.length && (
         <>
           <PluginsList plugins={data?.entities} />
-          <Pagination
-            page={data?.pagination.page}
-            pages={data?.pagination.pages}
-            setPage={(page) => setFilters({ page: String(page) })}
-          />
+          <div className="mb-6">
+            <Pagination
+              page={data?.pagination.page}
+              pages={data?.pagination.pages}
+              setPage={(page) => setFilters({ page: String(page) })}
+            />
+          </div>
         </>
       )}
     </NavigationPanel>

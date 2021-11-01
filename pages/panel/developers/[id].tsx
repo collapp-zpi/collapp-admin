@@ -78,7 +78,7 @@ const Developer = (
         <title>Developer</title>
       </Head>
       <NavigationPanel>
-        <Button onClick={() => router.back()} className="mr-auto my-3 ml-3">
+        <Button onClick={() => router.back()} className="mr-auto mt-3 ml-3">
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>

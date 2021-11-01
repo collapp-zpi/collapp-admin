@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import ErrorPage from 'includes/components/ErrorPage'
+import LoadingSessionLayout from 'includes/components/LoadingSession'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -57,7 +58,11 @@ const Developer = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   if (props.isError) {
-    return <ErrorPage {...props.error}></ErrorPage>
+    return (
+      <LoadingSessionLayout>
+        <ErrorPage {...props.error} />
+      </LoadingSessionLayout>
+    )
   }
 
   const { image, name, email } = props.developer

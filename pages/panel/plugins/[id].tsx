@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
 import ErrorPage from 'includes/components/ErrorPage'
+import LoadingSessionLayout from 'includes/components/LoadingSession'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -34,7 +35,11 @@ const Plugin = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   if (props.isError) {
-    return <ErrorPage {...props.error}></ErrorPage>
+    return (
+      <LoadingSessionLayout>
+        <ErrorPage {...props.error} />
+      </LoadingSessionLayout>
+    )
   }
 
   const { name, description } = props.plugin

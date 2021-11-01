@@ -28,6 +28,9 @@ class Plugins {
   async getPlugin(@Param('id') id: string) {
     const plugin = await prisma.draftPlugin.findFirst({
       where: { id },
+      include: {
+        source: true,
+      },
     })
 
     if (!plugin) {

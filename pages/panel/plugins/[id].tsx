@@ -1,5 +1,4 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import Link from 'next/link'
 import React, { useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
@@ -9,6 +8,8 @@ import NavigationPanel from 'includes/components/NavigationPanel'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
+import download from 'downloadjs'
+import { amazonUrl } from 'shared/utils/awsHelpers'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -47,7 +48,7 @@ const Plugin = (
   }
 
   const router = useRouter()
-  const { icon, name, description, createdAt } = props.plugin
+  const { icon, name, description, createdAt, source } = props.plugin
   const [visible, setVisible] = useState(false)
 
   return (
@@ -73,7 +74,12 @@ const Plugin = (
             </div>
             <p className="text-center italic p-4">"{description}"</p>
             <hr className="bg-gray-300 -mx-4 mb-4" />
-            <Button disabled={true}>Download</Button>
+            <Button
+              disabled={!source}
+              onClick={() => download(amazonUrl + source?.url)}
+            >
+              Download
+            </Button>
             <Button onClick={() => setVisible(true)}>Modal</Button>
             <Modal visible={visible}>UMC</Modal>
           </div>

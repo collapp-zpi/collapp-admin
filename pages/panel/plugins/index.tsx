@@ -39,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   }
-  console.log('Static')
 
   return {
     props: {

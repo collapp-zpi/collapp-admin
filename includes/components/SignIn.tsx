@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { object, string } from 'yup'
 import SubmitButton from '../../shared/components/button/SubmitButton'
@@ -8,6 +8,7 @@ import { MdAlternateEmail } from 'react-icons/md'
 import { signIn } from 'next-auth/react'
 import { RedirectableProviderType } from 'next-auth/providers'
 import { AiOutlineMail } from 'react-icons/ai'
+import { useRouter } from 'next/router'
 
 const schema = object().shape({
   email: string().email().required(),
@@ -26,7 +27,12 @@ const query = async ({ email }: { email: string }) => {
 }
 
 const SignIn = () => {
+  const router = useRouter()
   const [emailSent, setEmailSent] = useState(false)
+
+  useEffect(() => {
+    router.push('/')
+  }, [])
 
   const onSuccess = () => {
     setEmailSent(true)

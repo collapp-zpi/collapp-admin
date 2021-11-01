@@ -4,9 +4,19 @@ import React from 'react'
 import DevelopersList from 'includes/components/DevelopersList'
 import ErrorPage from 'includes/components/ErrorPage'
 import NavigationPanel from 'includes/components/NavigationPanel'
+import { generateKey, objectPick } from 'shared/utils/object'
+import { useFilters, withFilters } from 'shared/hooks/useFilters'
+import { useRouter } from 'next/router'
+import { useQuery } from 'shared/hooks/useQuery'
+import Button from 'shared/components/button/Button'
+import { Pagination } from 'shared/components/Pagination'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch(`${process.env.BASE_URL}/api/developers`, {
+  const params = objectPick(context.query, ['limit', 'page'])
+  const search = new URLSearchParams(params)
+
+  const res = await fetch(`${process.env.BASE_URL}/api/developers?${search}`, {
     method: 'GET',
     headers: {
       ...(context?.req?.headers?.cookie && {
@@ -14,36 +24,65 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }),
     },
   })
-  const isError = !res.ok
 
-  if (isError) {
+  if (!res.ok) {
     return {
       props: {
         error: await res.json(),
-        isError,
+        isError: true,
       },
     }
   }
 
-  const { entities, pagination } = await res.json()
   return {
-    props: { developers: entities, pagination, isError },
+    props: {
+      fallback: {
+        [generateKey('developers', params)]: await res.json(),
+      },
+    },
   }
 }
 
-export default function Developers(
+function Developers(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const router = useRouter()
+  const [, setFilters] = useFilters()
+  const { data } = useQuery('developers', '/api/developers')
+
   if (props.isError) {
     return <ErrorPage {...props.error}></ErrorPage>
   }
 
   return (
     <NavigationPanel>
-      <Link href="../">
-        <button>Back</button>
-      </Link>
-      <DevelopersList developers={props.developers} />
+      <Button onClick={() => router.push('/')} className="mr-auto my-3 ml-3">
+        Back
+      </Button>
+      {!data && (
+        <div className="m-auto">
+          <LogoSpinner />
+        </div>
+      )}
+      {!!data && !data.entities?.length && (
+        <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg m-auto">
+          No developers found
+        </div>
+      )}
+      {!!data && !!data.entities?.length && (
+        <>
+          <DevelopersList developers={data?.entities} />
+          <div className="mb-6">
+            <Pagination
+              page={data?.pagination.page}
+              pages={data?.pagination.pages}
+              setPage={(page) => setFilters({ page: String(page) })}
+            />
+          </div>
+        </>
+      )}
     </NavigationPanel>
   )
 }
+
+export default withFilters(Developers, ['limit', 'page'])

@@ -82,7 +82,7 @@ const Developer = (
         </Button>
         <div className="m-auto">
           <div className="flex bg-gray-50 shadow-2xl p-6 rounded-2xl items-center my-4">
-            <img src={image} alt="" className="w-60 h-60 ml-6 rounded-full" />
+            <img src={image} alt="" className="w-52 h-52 ml-6 rounded-2xl" />
             <div className="flex flex-col ml-8">
               <h1 className="text-4xl font-bold mt-8">{name}</h1>
               <p className="mt-4">Email: {!email ? '-' : email}</p>

@@ -15,6 +15,7 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
+import Head from 'next/head'
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -67,36 +68,44 @@ function Plugins(
   }
 
   return (
-    <NavigationPanel>
-      <Button onClick={() => router.push('/')} className="mr-auto my-3 ml-3">
-        Back
-      </Button>
-      <FiltersForm schema={filtersSchema}>
-        <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
-      </FiltersForm>
-      {!data && (
-        <div className="m-auto">
-          <LogoSpinner />
+    <div>
+      <Head>
+        <title>Plugins</title>
+      </Head>
+      <NavigationPanel>
+        <Button onClick={() => router.push('/')} className="mr-auto my-3 ml-3">
+          Back
+        </Button>
+        <div className="mx-3 mb-3">
+          <FiltersForm schema={filtersSchema}>
+            <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
+          </FiltersForm>
         </div>
-      )}
-      {!!data && !data.entities?.length && (
-        <div className="bg-white p-8 rounded-3xl shadow-2xl text-gray-400 text-center text-lg m-auto">
-          No plugins found
-        </div>
-      )}
-      {!!data && !!data.entities?.length && (
-        <>
-          <PluginsList plugins={data?.entities} />
-          <div className="mb-6">
-            <Pagination
-              page={data?.pagination.page}
-              pages={data?.pagination.pages}
-              setPage={(page) => setFilters({ page: String(page) })}
-            />
+
+        {!data && (
+          <div className="m-auto">
+            <LogoSpinner />
           </div>
-        </>
-      )}
-    </NavigationPanel>
+        )}
+        {!!data && !data.entities?.length && (
+          <div className="bg-white p-12 rounded-3xl shadow-2xl text-gray-400 text-center text-lg m-auto">
+            No plugins found
+          </div>
+        )}
+        {!!data && !!data.entities?.length && (
+          <>
+            <PluginsList plugins={data?.entities} />
+            <div className="mb-6">
+              <Pagination
+                page={data?.pagination.page}
+                pages={data?.pagination.pages}
+                setPage={(page) => setFilters({ page: String(page) })}
+              />
+            </div>
+          </>
+        )}
+      </NavigationPanel>
+    </div>
   )
 }
 

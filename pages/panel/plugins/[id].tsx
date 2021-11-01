@@ -113,7 +113,9 @@ const Plugin = (
                 >
                   Decide
                 </Button>
-                <Modal visible={visible}>UMC</Modal>
+                <Modal visible={visible} close={() => setVisible(false)}>
+                  WIP
+                </Modal>
               </div>
             )}
           </div>

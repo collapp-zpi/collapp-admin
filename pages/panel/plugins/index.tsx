@@ -94,7 +94,7 @@ function Plugins(
         )}
         {!!data && !!data.entities?.length && (
           <>
-            <PluginsList plugins={data?.entities} />
+            <PluginsList plugins={data?.entities} isCompact={false} />
             <div className="mb-6">
               <Pagination
                 page={data?.pagination.page}

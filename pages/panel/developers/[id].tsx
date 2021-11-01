@@ -1,5 +1,4 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import Link from 'next/link'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import ErrorPage from 'includes/components/ErrorPage'
@@ -70,20 +69,23 @@ const Developer = (
 
   return (
     <NavigationPanel>
-      <div>
-        <Link href="./">
-          <button>Developer list</button>
-        </Link>
-      </div>
-      <div>
-        <img src={image} alt="" />
-        <h1>{name}</h1>
-        <p>{email}</p>
-        <hr />
+      <div className="mx-auto">
+        <div className="flex bg-gray-50 shadow-2xl p-6 rounded-2xl items-center my-4">
+          <img src={image} alt="" className="w-60 h-60 ml-6 rounded-full" />
+          <div className="flex flex-col ml-8">
+            <h1 className="text-4xl font-bold mt-8">{name}</h1>
+            <p className="mt-4">Email: {!email ? '-' : email}</p>
+          </div>
+        </div>
         {props.plugins.length ? (
-          <PluginsList plugins={props.plugins}></PluginsList>
+          <div className="bg-gray-50 rounded-2xl shadow-2xl pt-6 mb-4">
+            <h2 className="text-xl font-medium text-center">
+              Developer's plugins:
+            </h2>
+            <PluginsList plugins={props.plugins} isCompact={true}></PluginsList>
+          </div>
         ) : (
-          <p>Developers hasn't created any plugins yet</p>
+          <p className="ml-2">Developers hasn't created any plugins yet</p>
         )}
       </div>
     </NavigationPanel>

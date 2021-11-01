@@ -4,6 +4,7 @@ import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import ErrorPage from 'includes/components/ErrorPage'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
+import NavigationPanel from 'includes/components/NavigationPanel'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -68,7 +69,7 @@ const Developer = (
   const { image, name, email } = props.developer
 
   return (
-    <>
+    <NavigationPanel>
       <div>
         <Link href="./">
           <button>Developer list</button>
@@ -85,7 +86,7 @@ const Developer = (
           <p>Developers hasn't created any plugins yet</p>
         )}
       </div>
-    </>
+    </NavigationPanel>
   )
 }
 

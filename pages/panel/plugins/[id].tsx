@@ -5,6 +5,7 @@ import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
 import ErrorPage from 'includes/components/ErrorPage'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
+import NavigationPanel from 'includes/components/NavigationPanel'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -46,7 +47,7 @@ const Plugin = (
   const [visible, setVisible] = useState(false)
 
   return (
-    <div>
+    <NavigationPanel>
       <Link href="../plugins">
         <button>Plugin list</button>
       </Link>
@@ -72,7 +73,7 @@ const Plugin = (
           Reject
         </button>
       </Modal>
-    </div>
+    </NavigationPanel>
   )
 }
 

@@ -14,6 +14,7 @@ import { FiltersForm } from 'shared/components/form/FiltersForm'
 import { AiOutlineSearch } from 'react-icons/ai'
 import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
+import LoadingSessionLayout from 'includes/components/LoadingSession'
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -58,7 +59,11 @@ function Plugins(
   const { data } = useQuery('plugins', '/api/plugins')
 
   if (props.isError) {
-    return <ErrorPage {...props.error} />
+    return (
+      <LoadingSessionLayout>
+        <ErrorPage {...props.error} />
+      </LoadingSessionLayout>
+    )
   }
 
   return (

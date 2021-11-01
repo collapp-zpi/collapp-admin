@@ -11,6 +11,7 @@ import { useQuery } from 'shared/hooks/useQuery'
 import Button from 'shared/components/button/Button'
 import { Pagination } from 'shared/components/Pagination'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
+import LoadingSessionLayout from 'includes/components/LoadingSession'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page'])
@@ -51,7 +52,11 @@ function Developers(
   const { data } = useQuery('developers', '/api/developers')
 
   if (props.isError) {
-    return <ErrorPage {...props.error}></ErrorPage>
+    return (
+      <LoadingSessionLayout>
+        <ErrorPage {...props.error} />
+      </LoadingSessionLayout>
+    )
   }
 
   return (

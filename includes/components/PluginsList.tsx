@@ -18,7 +18,7 @@ const PluginsList = ({ plugins }: { plugins: DraftPlugin[] }) => (
       <tbody>
         {plugins.map((plugin: DraftPlugin) => (
           <Link key={plugin.id} href={`/panel/plugins/${plugin.id}`}>
-            <tr style={{ cursor: 'pointer' }}>
+            <tr style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
               <td className="px-2 py-4">
                 <img
                   src={plugin.icon || '/collapp.svg'}

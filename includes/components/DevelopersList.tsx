@@ -15,7 +15,7 @@ const DevelopersList = ({ developers }: { developers: DeveloperUser[] }) => (
       <tbody>
         {developers.map((developer: DeveloperUser) => (
           <Link key={developer.id} href={`/panel/developers/${developer.id}`}>
-            <tr style={{ cursor: 'pointer' }}>
+            <tr style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
               <td className="px-2 py-4">
                 <img
                   src={developer.image || ''}

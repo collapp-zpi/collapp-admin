@@ -73,7 +73,7 @@ function Plugins(
         <title>Plugins</title>
       </Head>
       <NavigationPanel>
-        <Button onClick={() => router.push('/')} className="mr-auto my-3 ml-3">
+        <Button onClick={() => router.back()} className="mr-auto my-3 ml-3">
           Back
         </Button>
         <div className="mx-3 mb-3">

@@ -4,6 +4,8 @@ import PluginsList from 'includes/components/PluginsList'
 import ErrorPage from 'includes/components/ErrorPage'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
 import NavigationPanel from 'includes/components/NavigationPanel'
+import Button from 'shared/components/button/Button'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -65,11 +67,15 @@ const Developer = (
     )
   }
 
+  const router = useRouter()
   const { image, name, email } = props.developer
 
   return (
     <NavigationPanel>
-      <div className="mx-auto">
+      <Button onClick={() => router.back()} className="mr-auto my-3 ml-3">
+        Back
+      </Button>
+      <div className="m-auto">
         <div className="flex bg-gray-50 shadow-2xl p-6 rounded-2xl items-center my-4">
           <img src={image} alt="" className="w-60 h-60 ml-6 rounded-full" />
           <div className="flex flex-col ml-8">

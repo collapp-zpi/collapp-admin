@@ -67,7 +67,11 @@ function Developers(
         <title>Developers</title>
       </Head>
       <NavigationPanel>
-        <Button onClick={() => router.back()} className="mr-auto mt-3 ml-3">
+        <Button
+          color="light"
+          onClick={() => router.back()}
+          className="mr-auto mt-3 ml-3 border-2 border-gray-400"
+        >
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>

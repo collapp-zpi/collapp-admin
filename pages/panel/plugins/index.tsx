@@ -74,11 +74,15 @@ function Plugins(
         <title>Plugins</title>
       </Head>
       <NavigationPanel>
-        <Button onClick={() => router.back()} className="mr-auto mt-3 ml-3">
+        <Button
+          color="light"
+          onClick={() => router.back()}
+          className="mr-auto mt-3 ml-3 border-2 border-gray-400"
+        >
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
-        <div className="mx-3 mb-3">
+        <div className="mx-3 my-3">
           <FiltersForm schema={filtersSchema}>
             <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
           </FiltersForm>
@@ -90,7 +94,7 @@ function Plugins(
           </div>
         )}
         {!!data && !data.entities?.length && (
-          <div className="bg-white p-12 rounded-3xl shadow-2xl text-gray-400 text-center text-lg m-auto">
+          <div className="bg-white p-20 rounded-3xl shadow-2xl text-gray-600 text-center text-lg m-auto">
             No plugins found
           </div>
         )}

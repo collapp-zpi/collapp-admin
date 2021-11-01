@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import download from 'downloadjs'
 import { amazonUrl } from 'shared/utils/awsHelpers'
+import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -58,6 +59,7 @@ const Plugin = (
       </Head>
       <NavigationPanel>
         <Button onClick={() => router.back()} className="mr-auto my-3 ml-3">
+          <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
         <div className="m-auto">

@@ -4,6 +4,8 @@ import React, { ReactNode } from 'react'
 import Button from 'shared/components/button/Button'
 import { NavbarLogo } from 'shared/components/NavbarLogo'
 import { VscSignOut } from 'react-icons/vsc'
+import { CgExtension } from 'react-icons/cg'
+import { HiCode } from 'react-icons/hi'
 
 const NavigationPanel = ({ children }: { children: ReactNode }) => {
   const router = useRouter()
@@ -13,15 +15,17 @@ const NavigationPanel = ({ children }: { children: ReactNode }) => {
         <div className="flex space-x-8 items-center ml-1 my-4">
           <NavbarLogo width="2rem"></NavbarLogo>
           <h1
-            className="cursor-pointer hover:text-black"
+            className="cursor-pointer flex items-center hover:text-black"
             onClick={() => router.push('/panel/developers')}
           >
+            <HiCode className="mx-1" />
             Developers
           </h1>
           <h1
-            className="cursor-pointer hover:text-black"
+            className="cursor-pointer flex items-center hover:text-black"
             onClick={() => router.push('/panel/plugins')}
           >
+            <CgExtension className="mx-1" />
             Plugins
           </h1>
         </div>

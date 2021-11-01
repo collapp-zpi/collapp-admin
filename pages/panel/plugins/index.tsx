@@ -16,6 +16,7 @@ import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
+import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -74,6 +75,7 @@ function Plugins(
       </Head>
       <NavigationPanel>
         <Button onClick={() => router.back()} className="mr-auto my-3 ml-3">
+          <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
         <div className="mx-3 mb-3">

@@ -7,6 +7,7 @@ import NavigationPanel from 'includes/components/NavigationPanel'
 import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -78,6 +79,7 @@ const Developer = (
       </Head>
       <NavigationPanel>
         <Button onClick={() => router.back()} className="mr-auto my-3 ml-3">
+          <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
         <div className="m-auto">

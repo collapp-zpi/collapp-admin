@@ -82,7 +82,7 @@ function Plugins(
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
-        <div className="mx-3 my-3">
+        <div className="mx-16 my-3 shadow-sm">
           <FiltersForm schema={filtersSchema}>
             <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
           </FiltersForm>
@@ -99,7 +99,7 @@ function Plugins(
           </div>
         )}
         {!!data && !!data.entities?.length && (
-          <>
+          <div className="my-auto mx-16">
             <PluginsList plugins={data?.entities} isCompact={false} />
             <div className="mb-6">
               <Pagination
@@ -108,7 +108,7 @@ function Plugins(
                 setPage={(page) => setFilters({ page: String(page) })}
               />
             </div>
-          </>
+          </div>
         )}
       </NavigationPanel>
     </div>

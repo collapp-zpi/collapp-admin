@@ -15,8 +15,8 @@ const PluginsList = ({
     ? { padding: 'px-10 py-4', imgSize: 'w-40 h-40 rounded-full' }
     : { padding: 'px-6 py-2', imgSize: 'w-20 h-20 rounded-full' }
   return (
-    <div className="m-auto bg-gray-50 shadow-2xl p-8 rounded-2xl">
-      <table className="text-center">
+    <div className="flex justify-center m-auto bg-gray-50 shadow-2xl p-8 rounded-2xl">
+      <table className="text-center flex-1">
         <thead className="px-6 py-4">
           <tr>
             <th className="px-2 py-4"></th>

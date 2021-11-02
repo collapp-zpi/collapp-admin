@@ -157,7 +157,7 @@ const Plugin = (
                 </div>
               )}
             </div>
-            {isPending && (
+            {isPending && !!source && (
               <div className="mt-8">
                 <hr className="border-gray-300" />
                 <Button
@@ -169,7 +169,23 @@ const Plugin = (
                   Decide
                 </Button>
                 <Modal visible={visible} close={() => setVisible(false)}>
-                  WIP
+                  <div className="flex flex-col m-8">
+                    <h1 className="text-center text-3xl text-red-500">
+                      Carefully
+                    </h1>
+                    <p className="py-8">
+                      What would you like to do with this plugin?
+                    </p>
+                    <div className="flex justify-evenly space-x-8 align-bottom">
+                      <Button className="flex-1">Accept</Button>
+                      <Button
+                        className="flex-1 border-2 border-red-500"
+                        color="red-link"
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                  </div>
                 </Modal>
               </div>
             )}

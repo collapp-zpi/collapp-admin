@@ -57,6 +57,13 @@ const Plugin = (
     )
   }
 
+  const handleReject = () => {
+    setVisible(false)
+  }
+  const handleAccept = () => {
+    setVisible(false)
+  }
+
   const router = useRouter()
   const {
     icon,
@@ -177,10 +184,13 @@ const Plugin = (
                       What would you like to do with this plugin?
                     </p>
                     <div className="flex justify-evenly space-x-8 align-bottom">
-                      <Button className="flex-1">Accept</Button>
+                      <Button className="flex-1" onClick={handleAccept}>
+                        Accept
+                      </Button>
                       <Button
                         className="flex-1 border-2 border-red-500"
                         color="red-link"
+                        onClick={handleReject}
                       >
                         Reject
                       </Button>

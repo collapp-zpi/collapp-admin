@@ -16,6 +16,10 @@ import {
   BsFillCloudDownloadFill,
   BsFillQuestionSquareFill,
 } from 'react-icons/bs'
+import {
+  InputRangeFrame,
+  PureInputRange,
+} from 'shared/components/input/InputRange'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -54,8 +58,19 @@ const Plugin = (
   }
 
   const router = useRouter()
-  const { icon, name, description, createdAt, source, authorId, isPending } =
-    props.plugin
+  const {
+    icon,
+    name,
+    description,
+    createdAt,
+    source,
+    authorId,
+    isPending,
+    minHeight,
+    maxHeight,
+    minWidth,
+    maxWidth,
+  } = props.plugin
   const [visible, setVisible] = useState(false)
 
   return (
@@ -87,6 +102,41 @@ const Plugin = (
             <p className="text-center italic p-2 my-12 rounded-lg bg-gray-100 border-2">
               "{!!description ? description : '-'}"
             </p>
+            <div className="flex justify-around space-x-8 mb-8">
+              <InputRangeFrame
+                className="mt-2 flex-1"
+                label="Height"
+                display={
+                  minHeight === maxHeight
+                    ? minHeight
+                    : `${minHeight} - ${maxHeight}`
+                }
+              >
+                <PureInputRange
+                  values={[minHeight, maxHeight]}
+                  onChange={() => {}}
+                  min={1}
+                  max={4}
+                  disabled={true}
+                />
+              </InputRangeFrame>
+
+              <InputRangeFrame
+                className="mt-2 flex-1"
+                label="Width"
+                display={
+                  minWidth === maxWidth ? minWidth : `${minWidth} - ${maxWidth}`
+                }
+              >
+                <PureInputRange
+                  values={[minWidth, maxWidth]}
+                  onChange={() => {}}
+                  min={1}
+                  max={4}
+                  disabled={true}
+                />
+              </InputRangeFrame>
+            </div>
             <div className="m-auto">
               <div className="flex items-center justify-center space-x-4 my-3">
                 <p>Author:</p>

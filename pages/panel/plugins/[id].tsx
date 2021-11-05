@@ -23,6 +23,10 @@ import {
 import { CgSpinner } from 'react-icons/cg'
 import request from 'shared/utils/request'
 import toast from 'react-hot-toast'
+import { generateKey } from 'shared/utils/object'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
+import { useQuery } from 'shared/hooks/useQuery'
+import { withFallback } from 'shared/hooks/useApiForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -43,8 +47,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      plugin: await res.json(),
-      isError: !res.ok,
+      fallback: {
+        [generateKey('plugin', String(id))]: await res.json(),
+      },
     },
   }
 }
@@ -59,11 +64,23 @@ const Plugin = (
       </LoadingSessionLayout>
     )
   }
+  const router = useRouter()
+  const pathId = String(router.query.id)
+  const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`)
   const [visible, setVisible] = useState(false)
   const [rejecting, setRejecting] = useState(false)
   const [accepting, setAcceptiing] = useState(false)
 
-  const router = useRouter()
+  if (!data) {
+    return (
+      <LoadingSessionLayout>
+        <div className="m-auto">
+          <LogoSpinner />
+        </div>
+      </LoadingSessionLayout>
+    )
+  }
+
   const {
     id,
     icon,
@@ -78,7 +95,7 @@ const Plugin = (
     maxHeight,
     minWidth,
     maxWidth,
-  } = props.plugin
+  } = data
 
   const closeModal = () => {
     setVisible(rejecting || accepting)
@@ -243,4 +260,4 @@ const Plugin = (
   )
 }
 
-export default Plugin
+export default withFallback(Plugin)

@@ -27,6 +27,7 @@ import { generateKey } from 'shared/utils/object'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { useQuery } from 'shared/hooks/useQuery'
 import { withFallback } from 'shared/hooks/useApiForm'
+import { useSWRConfig } from 'swr'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -67,6 +68,7 @@ const Plugin = (
   const router = useRouter()
   const pathId = String(router.query.id)
   const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`)
+  const { mutate } = useSWRConfig()
   const [visible, setVisible] = useState(false)
   const [rejecting, setRejecting] = useState(false)
   const [accepting, setAccepting] = useState(false)
@@ -112,6 +114,7 @@ const Plugin = (
       setStatus(false)
       setVisible(false)
       toast.success(`Plugin was ${decision ? 'accepted' : 'rejected'}`)
+      mutate(generateKey('plugin', id))
     } catch (e: any) {
       toast.error(e?.message)
       setStatus(false)

@@ -69,7 +69,7 @@ class Plugins {
         content: 'Plugin was rejected',
         admin: {
           connect: {
-            id: user.id,
+            id: admin.id,
           },
         },
         plugin: {
@@ -84,6 +84,59 @@ class Plugins {
       where: { id },
       data: { isPending: false },
     })
+  }
+
+  @Post('/:id/accept')
+  async acceptPlugin(@Param('id') id: string, @User user: RequestUser) {
+    const plugin = await prisma.draftPlugin.findFirst({
+      where: { id },
+      include: {
+        source: true,
+      },
+    })
+
+    if (!plugin) {
+      throw new NotFoundException('The plugin was not found.')
+    }
+    if (!plugin.isPending) {
+      throw new BadRequestException(`Only pending plugins can be accepted.`)
+    }
+    if (!plugin.source) {
+      throw new BadRequestException(`Plugin must have the source code.`)
+    }
+
+    const admin = await prisma.adminUser.findFirst({
+      where: { id: user.id },
+    })
+
+    if (!admin) {
+      throw new UnauthorizedException('Only admins can accept plugins.')
+    }
+
+    await prisma.pluginLog.create({
+      data: {
+        content: 'Plugin was accepted',
+        admin: {
+          connect: {
+            id: admin.id,
+          },
+        },
+        plugin: {
+          connect: {
+            id,
+          },
+        },
+      },
+    })
+
+    const pluginToBeBuilt = await prisma.draftPlugin.update({
+      where: { id },
+      data: {
+        isBuilding: true,
+      },
+    })
+
+    // Send message to build server
   }
 }
 

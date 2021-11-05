@@ -1,13 +1,16 @@
 import {
   createHandler,
   Get,
+  Post,
   Param,
   NotFoundException,
   Query,
   ParseNumberPipe,
+  BadRequestException,
+  UnauthorizedException,
 } from '@storyofams/next-api-decorators'
 import { prisma } from 'shared/utils/prismaClient'
-import { NextAuthGuard } from 'shared/utils/apiDecorators'
+import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 
 @NextAuthGuard()
@@ -38,6 +41,49 @@ class Plugins {
     }
 
     return plugin
+  }
+
+  @Post('/:id/reject')
+  async rejectPlugin(@Param('id') id: string, @User user: RequestUser) {
+    const plugin = await prisma.draftPlugin.findFirst({
+      where: { id },
+    })
+
+    if (!plugin) {
+      throw new NotFoundException('The plugin was not found.')
+    }
+    if (!plugin.isPending) {
+      throw new BadRequestException(`Only pending plugins can be rejected.`)
+    }
+
+    const admin = await prisma.adminUser.findFirst({
+      where: { id: user.id },
+    })
+
+    if (!admin) {
+      throw new UnauthorizedException('Only admins can reject plugins.')
+    }
+
+    await prisma.pluginLog.create({
+      data: {
+        content: 'Plugin was rejected',
+        admin: {
+          connect: {
+            id: user.id,
+          },
+        },
+        plugin: {
+          connect: {
+            id,
+          },
+        },
+      },
+    })
+
+    return await prisma.draftPlugin.update({
+      where: { id },
+      data: { isPending: false },
+    })
   }
 }
 

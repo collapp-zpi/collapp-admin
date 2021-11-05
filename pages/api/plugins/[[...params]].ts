@@ -12,6 +12,7 @@ import {
 import { prisma } from 'shared/utils/prismaClient'
 import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
+import { amazonUrl } from 'shared/utils/awsHelpers'
 
 @NextAuthGuard()
 class Plugins {
@@ -92,6 +93,7 @@ class Plugins {
       where: { id },
       include: {
         source: true,
+        author: true,
       },
     })
 
@@ -100,6 +102,9 @@ class Plugins {
     }
     if (!plugin.isPending) {
       throw new BadRequestException(`Only pending plugins can be accepted.`)
+    }
+    if (plugin.isBuilding) {
+      throw new BadRequestException(`Plugin is already being built.`)
     }
     if (!plugin.source) {
       throw new BadRequestException(`Plugin must have the source code.`)
@@ -136,9 +141,22 @@ class Plugins {
       },
     })
 
-    return pluginToBeBuilt
+    fetch('https://collapp-build-server.herokuapp.com/build', {
+      method: 'POST',
+      body: JSON.stringify({
+        requestId: id,
+        name: pluginToBeBuilt.name,
+        zip: {
+          url: amazonUrl + plugin.source.url,
+        },
+        developer: {
+          name: plugin.author.name,
+          email: plugin.author.email,
+        },
+      }),
+    })
 
-    // Send message to build server
+    return pluginToBeBuilt
   }
 }
 

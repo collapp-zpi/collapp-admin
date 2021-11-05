@@ -136,6 +136,8 @@ class Plugins {
       },
     })
 
+    return pluginToBeBuilt
+
     // Send message to build server
   }
 }

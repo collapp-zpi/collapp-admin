@@ -69,7 +69,7 @@ const Plugin = (
   const { data } = useQuery(['plugin', pathId], `/api/plugins/${pathId}`)
   const [visible, setVisible] = useState(false)
   const [rejecting, setRejecting] = useState(false)
-  const [accepting, setAcceptiing] = useState(false)
+  const [accepting, setAccepting] = useState(false)
 
   if (!data) {
     return (
@@ -101,22 +101,29 @@ const Plugin = (
     setVisible(rejecting || accepting)
   }
 
-  const handleReject = async () => {
-    setRejecting(true)
+  const handleModalButtons = async (decision: boolean) => {
+    const setStatus = decision ? setAccepting : setRejecting
+    setStatus(true)
 
     try {
-      const data = await request.patch(`/api/plugins/${id}/reject`)
-      setRejecting(false)
+      const data = await request.patch(
+        `/api/plugins/${id}/${decision ? 'accept' : 'reject'}`,
+      )
+      setStatus(false)
       setVisible(false)
-      toast.success('Plugin was rejected')
+      toast.success(`Plugin was ${decision ? 'accepted' : 'rejected'}`)
     } catch (e: any) {
       toast.error(e?.message)
-      setRejecting(false)
+      setStatus(false)
     }
   }
 
-  const handleAccept = () => {
-    setAcceptiing(true)
+  const handleReject = () => {
+    handleModalButtons(false)
+  }
+
+  const handleAccept = async () => {
+    handleModalButtons(true)
   }
 
   return (

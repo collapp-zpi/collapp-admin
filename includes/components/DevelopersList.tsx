@@ -20,7 +20,7 @@ const DevelopersList = ({ developers }: { developers: DeveloperUser[] }) => (
                 <img
                   src={developer.image || ''}
                   alt=""
-                  className="w-40 h-40 rounded-full"
+                  className="w-32 h-32 rounded-full"
                 />
               </td>
               <td className="px-8 py-4">{developer.name}</td>

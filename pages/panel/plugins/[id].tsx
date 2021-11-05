@@ -145,7 +145,7 @@ const Plugin = (
             <div className="flex items-center">
               <img
                 src={icon || '/collapp.svg'}
-                className="w-40 h-40 rounded-2xl"
+                className="w-40 h-40 rounded-2xl border-2"
               />
               <div className="flex flex-col ml-8">
                 <h1 className="text-4xl font-bold">{name}</h1>

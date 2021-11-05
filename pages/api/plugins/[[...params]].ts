@@ -57,7 +57,7 @@ class Plugins {
     }
 
     const admin = await prisma.adminUser.findFirst({
-      where: { id: user.id },
+      where: { email: user.email },
     })
 
     if (!admin) {

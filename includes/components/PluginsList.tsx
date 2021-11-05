@@ -12,7 +12,7 @@ const PluginsList = ({
   isCompact: boolean
 }) => {
   const { padding, imgSize }: { padding: string; imgSize: string } = !isCompact
-    ? { padding: 'px-10 py-4', imgSize: 'w-40 h-40 rounded-full' }
+    ? { padding: 'px-8 py-4', imgSize: 'w-32 h-32 rounded-full' }
     : { padding: 'px-6 py-2', imgSize: 'w-20 h-20 rounded-full' }
   return (
     <div className="flex justify-center m-auto bg-gray-50 shadow-2xl p-8 rounded-2xl">

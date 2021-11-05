@@ -20,6 +20,9 @@ import {
   InputRangeFrame,
   PureInputRange,
 } from 'shared/components/input/InputRange'
+import { CgSpinner } from 'react-icons/cg'
+import request from 'shared/utils/request'
+import toast from 'react-hot-toast'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -56,16 +59,13 @@ const Plugin = (
       </LoadingSessionLayout>
     )
   }
-
-  const handleReject = () => {
-    setVisible(false)
-  }
-  const handleAccept = () => {
-    setVisible(false)
-  }
+  const [visible, setVisible] = useState(false)
+  const [rejecting, setRejecting] = useState(false)
+  const [accepting, setAcceptiing] = useState(false)
 
   const router = useRouter()
   const {
+    id,
     icon,
     name,
     description,
@@ -73,12 +73,34 @@ const Plugin = (
     source,
     authorId,
     isPending,
+    isBuilding,
     minHeight,
     maxHeight,
     minWidth,
     maxWidth,
   } = props.plugin
-  const [visible, setVisible] = useState(false)
+
+  const closeModal = () => {
+    setVisible(rejecting || accepting)
+  }
+
+  const handleReject = async () => {
+    setRejecting(true)
+
+    try {
+      const data = await request.patch(`/api/plugins/${id}/reject`)
+      setRejecting(false)
+      setVisible(false)
+      toast.success('Plugin was rejected')
+    } catch (e: any) {
+      toast.error(e?.message)
+      setRejecting(false)
+    }
+  }
+
+  const handleAccept = () => {
+    setAcceptiing(true)
+  }
 
   return (
     <div>
@@ -164,7 +186,7 @@ const Plugin = (
                 </div>
               )}
             </div>
-            {isPending && !!source && (
+            {isPending && !!source && !isBuilding && (
               <div className="mt-8">
                 <hr className="border-gray-300" />
                 <Button
@@ -175,7 +197,7 @@ const Plugin = (
                   <BsFillQuestionSquareFill className="mr-2 -ml-2" />
                   Decide
                 </Button>
-                <Modal visible={visible} close={() => setVisible(false)}>
+                <Modal visible={visible} close={() => closeModal()}>
                   <div className="flex flex-col m-8">
                     <h1 className="text-center text-3xl text-red-500">
                       Carefully
@@ -184,14 +206,29 @@ const Plugin = (
                       What would you like to do with this plugin?
                     </p>
                     <div className="flex justify-evenly space-x-8 align-bottom">
-                      <Button className="flex-1" onClick={handleAccept}>
+                      <Button
+                        className={`flex-1 transition-all ${
+                          (accepting || rejecting) && 'opacity-70'
+                        }`}
+                        onClick={handleAccept}
+                        disabled={rejecting || accepting}
+                      >
+                        {accepting && (
+                          <CgSpinner className="animate-spin mr-2 -ml-2" />
+                        )}
                         Accept
                       </Button>
                       <Button
-                        className="flex-1 border-2 border-red-500"
+                        className={`flex-1 border-2 border-red-500 transition-all ${
+                          (accepting || rejecting) && 'opacity-70'
+                        }`}
                         color="red-link"
                         onClick={handleReject}
+                        disabled={rejecting || accepting}
                       >
+                        {rejecting && (
+                          <CgSpinner className="animate-spin mr-2 -ml-2" />
+                        )}
                         Reject
                       </Button>
                     </div>

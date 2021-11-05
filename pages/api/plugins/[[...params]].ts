@@ -1,7 +1,7 @@
 import {
   createHandler,
   Get,
-  Post,
+  Patch,
   Param,
   NotFoundException,
   Query,
@@ -43,7 +43,7 @@ class Plugins {
     return plugin
   }
 
-  @Post('/:id/reject')
+  @Patch('/:id/reject')
   async rejectPlugin(@Param('id') id: string, @User user: RequestUser) {
     const plugin = await prisma.draftPlugin.findFirst({
       where: { id },
@@ -86,7 +86,7 @@ class Plugins {
     })
   }
 
-  @Post('/:id/accept')
+  @Patch('/:id/accept')
   async acceptPlugin(@Param('id') id: string, @User user: RequestUser) {
     const plugin = await prisma.draftPlugin.findFirst({
       where: { id },

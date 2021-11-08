@@ -8,6 +8,10 @@ import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
+import { generateKey } from 'shared/utils/object'
+import { useQuery } from 'shared/hooks/useQuery'
+import { LogoSpinner } from 'shared/components/LogoSpinner'
+import { withFallback } from 'shared/hooks/useApiForm'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -46,14 +50,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: { error: await pluginsRes.json(), isError } }
   }
 
-  const { entities, pagination } = await pluginsRes.json()
-
   return {
     props: {
       developer: await developerRes.json(),
-      plugins: entities,
-      pagination,
-      isError,
+      fallback: {
+        [generateKey('plugins', String(id))]: await pluginsRes.json(),
+      },
     },
   }
 }
@@ -70,6 +72,11 @@ const Developer = (
   }
 
   const router = useRouter()
+  const pathId = String(router.query.id)
+  const { data } = useQuery(
+    ['plugins', pathId],
+    `/api/developers/${pathId}/plugins`,
+  )
   const { image, name, email } = props.developer
 
   return (
@@ -87,20 +94,24 @@ const Developer = (
           Back
         </Button>
         <div className="m-auto">
-          <div className="flex bg-gray-50 shadow-2xl p-6 rounded-2xl items-center my-4">
-            <img src={image} alt="" className="w-52 h-52 ml-6 rounded-2xl" />
+          <div className="flex bg-gray-50 shadow-2xl p-6 rounded-2xl items-center my-4 px-8">
+            <img src={image} alt="" className="w-52 h-52 rounded-2xl" />
             <div className="flex flex-col ml-8">
               <h1 className="text-4xl font-bold mt-8">{name}</h1>
               <p className="mt-4">Email: {!email ? '-' : email}</p>
             </div>
           </div>
-          {props.plugins.length ? (
+          {!data ? (
+            <div className="m-auto">
+              <LogoSpinner />
+            </div>
+          ) : data?.entities.length ? (
             <div className="bg-gray-50 rounded-2xl shadow-2xl pt-6 mb-4">
               <h2 className="text-xl font-medium text-center">
                 Developer's plugins:
               </h2>
               <PluginsList
-                plugins={props.plugins}
+                plugins={data?.entities}
                 isCompact={true}
               ></PluginsList>
             </div>
@@ -113,4 +124,4 @@ const Developer = (
   )
 }
 
-export default Developer
+export default withFallback(Developer)

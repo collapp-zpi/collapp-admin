@@ -151,7 +151,7 @@ class Plugins {
       },
     })
 
-    axios.post('https://collapp-build-server.herokuapp.com//build', {
+    axios.post('https://collapp-build-server.herokuapp.com/build', {
       requestId: id,
       name: pluginToBeBuilt.name,
       developer: {

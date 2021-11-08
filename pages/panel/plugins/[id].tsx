@@ -28,6 +28,7 @@ import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { useQuery } from 'shared/hooks/useQuery'
 import { withFallback } from 'shared/hooks/useApiForm'
 import { useSWRConfig } from 'swr'
+import { PluginLog } from '.pnpm/@prisma+client@3.1.1_prisma@3.1.1/node_modules/.prisma/client'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -193,7 +194,7 @@ const Plugin = (
                 />
               </InputRangeFrame>
             </div>
-            <div className="m-auto">
+            <div className="flex justify-around m-auto">
               <div className="flex items-center justify-center space-x-4 my-3">
                 <p>Author:</p>
                 <Button
@@ -264,6 +265,24 @@ const Plugin = (
               </div>
             )}
           </div>
+          {!!data.logs.length && (
+            <div className="bg-gray-50 shadow-2xl py-8 px-16 rounded-2xl mb-4">
+              <table>
+                <tbody>
+                  {data.logs.map((log: PluginLog) => (
+                    <tr key={log.id} className="text-gray-500 text-sm">
+                      <td className="pr-8">{dayjs(log.date).format('LLL')}</td>
+                      <td>{log.content}</td>
+                      <td>
+                        by admin{' '}
+                        <span className="underline">{log.admin?.email}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </NavigationPanel>
     </div>

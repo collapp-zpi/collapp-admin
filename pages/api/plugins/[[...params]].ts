@@ -34,6 +34,11 @@ class Plugins {
       where: { id },
       include: {
         source: true,
+        logs: {
+          include: {
+            admin: true,
+          },
+        },
       },
     })
 

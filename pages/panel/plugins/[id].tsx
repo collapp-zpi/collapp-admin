@@ -195,7 +195,7 @@ const Plugin = (
               </InputRangeFrame>
             </div>
             <div className="flex justify-around m-auto">
-              <div className="flex items-center justify-center space-x-4 my-3">
+              <div className="flex items-center justify-center space-x-4 my-3 mx-4">
                 <p>Author:</p>
                 <Button
                   onClick={() => router.push(`/panel/developers/${authorId}`)}
@@ -205,7 +205,7 @@ const Plugin = (
                 </Button>
               </div>
               {!!source && (
-                <div className="flex items-center justify-center space-x-4 my-3">
+                <div className="flex items-center justify-center space-x-4 my-3 mx-4">
                   <p>Source:</p>
                   <Button onClick={() => download(amazonUrl + source.url)}>
                     <BsFillCloudDownloadFill className="mr-2 -ml-2" />

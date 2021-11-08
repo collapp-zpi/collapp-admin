@@ -144,19 +144,37 @@ class Plugins {
       data: {
         isBuilding: true,
       },
+      include: {
+        source: true,
+        author: true,
+      },
     })
+
+    console.log(
+      JSON.stringify({
+        requestId: id,
+        name: pluginToBeBuilt.name,
+        developer: {
+          name: pluginToBeBuilt.author.name,
+          email: pluginToBeBuilt.author.email,
+        },
+        zip: {
+          url: amazonUrl + pluginToBeBuilt.source?.url,
+        },
+      }),
+    )
 
     fetch('https://collapp-build-server.herokuapp.com/build', {
       method: 'POST',
       body: JSON.stringify({
         requestId: id,
         name: pluginToBeBuilt.name,
-        zip: {
-          url: amazonUrl + plugin.source.url,
-        },
         developer: {
-          name: plugin.author.name,
-          email: plugin.author.email,
+          name: pluginToBeBuilt.author.name,
+          email: pluginToBeBuilt.author.email,
+        },
+        zip: {
+          url: amazonUrl + pluginToBeBuilt.source?.url,
         },
       }),
     })

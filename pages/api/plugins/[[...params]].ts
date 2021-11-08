@@ -13,6 +13,7 @@ import { prisma } from 'shared/utils/prismaClient'
 import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 import { amazonUrl } from 'shared/utils/awsHelpers'
+import axios from 'axios'
 
 @NextAuthGuard()
 class Plugins {
@@ -72,7 +73,7 @@ class Plugins {
 
     await prisma.pluginLog.create({
       data: {
-        content: 'Plugin was rejected',
+        content: 'Rejected',
         admin: {
           connect: {
             id: admin.id,
@@ -125,7 +126,7 @@ class Plugins {
 
     await prisma.pluginLog.create({
       data: {
-        content: 'Plugin was accepted',
+        content: 'Accepted',
         admin: {
           connect: {
             id: admin.id,
@@ -150,33 +151,16 @@ class Plugins {
       },
     })
 
-    console.log(
-      JSON.stringify({
-        requestId: id,
-        name: pluginToBeBuilt.name,
-        developer: {
-          name: pluginToBeBuilt.author.name,
-          email: pluginToBeBuilt.author.email,
-        },
-        zip: {
-          url: amazonUrl + pluginToBeBuilt.source?.url,
-        },
-      }),
-    )
-
-    fetch('https://collapp-build-server.herokuapp.com/build', {
-      method: 'POST',
-      body: JSON.stringify({
-        requestId: id,
-        name: pluginToBeBuilt.name,
-        developer: {
-          name: pluginToBeBuilt.author.name,
-          email: pluginToBeBuilt.author.email,
-        },
-        zip: {
-          url: amazonUrl + pluginToBeBuilt.source?.url,
-        },
-      }),
+    axios.post('https://collapp-build-server.herokuapp.com//build', {
+      requestId: id,
+      name: pluginToBeBuilt.name,
+      developer: {
+        name: pluginToBeBuilt.author.name,
+        email: pluginToBeBuilt.author.email,
+      },
+      zip: {
+        url: amazonUrl + pluginToBeBuilt.source?.url,
+      },
     })
 
     return pluginToBeBuilt

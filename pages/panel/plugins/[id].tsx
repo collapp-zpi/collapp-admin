@@ -270,13 +270,15 @@ const Plugin = (
               <table>
                 <tbody>
                   {data.logs.map((log: PluginLog) => (
-                    <tr key={log.id} className="text-gray-500 text-sm">
+                    <tr key={log.id} className="text-gray-500 text-sm mt-2">
                       <td className="pr-8">{dayjs(log.date).format('LLL')}</td>
                       <td>{log.content}</td>
-                      <td>
-                        by admin{' '}
-                        <span className="underline">{log.admin?.email}</span>
-                      </td>
+                      {!!log.admin && (
+                        <td className="ml-1">
+                          by admin{' '}
+                          <span className=" underline">{log.admin?.email}</span>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

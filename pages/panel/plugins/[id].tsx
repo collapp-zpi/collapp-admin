@@ -227,12 +227,12 @@ const Plugin = (
                 <Modal visible={visible} close={() => closeModal()}>
                   <div className="flex flex-col m-8">
                     <h1 className="text-center text-3xl text-red-500">
-                      Carefully
+                      Carefully!
                     </h1>
                     <p className="py-8">
                       What would you like to do with this plugin?
                     </p>
-                    <div className="flex justify-evenly space-x-8 align-bottom">
+                    <div className="flex justify-evenly space-x-8 align-bottom mt-4">
                       <Button
                         className={`flex-1 transition-all ${
                           (accepting || rejecting) && 'opacity-70'

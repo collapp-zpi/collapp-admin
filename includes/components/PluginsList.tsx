@@ -3,16 +3,21 @@ import { DraftPlugin } from '@prisma/client'
 import Link from 'next/link'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import {
+  buildingColor,
+  pendingColor,
+  privateColor,
+} from 'includes/utils/statusColors'
 
 const StatusColors = () => (
   <div className="flex justify-end items-center mt-5">
-    <div className={'w-4 h-4 rounded-full bg-gray-300'} />
+    <div className={`w-4 h-4 rounded-full ${privateColor}`} />
     <p>-Private</p>
 
-    <div className={'ml-3 w-4 h-4 rounded-full bg-green-500'} />
+    <div className={`ml-3 w-4 h-4 rounded-full ${pendingColor}`} />
     <p>-Pending</p>
 
-    <div className={'ml-3 w-4 h-4 rounded-full bg-red-600'} />
+    <div className={`ml-3 w-4 h-4 rounded-full ${buildingColor}`} />
     <p>-Building</p>
   </div>
 )
@@ -48,7 +53,7 @@ const PluginsList = ({
                     <img
                       src={plugin.icon || '/collapp.svg'}
                       alt="Plugin Icon"
-                      className={imgSize}
+                      className={`${imgSize} border-2 border-gray-300`}
                     />
                   </td>
                   <td className={padding}>{plugin.name}</td>
@@ -61,9 +66,9 @@ const PluginsList = ({
                         'w-4 h-4 rounded-full mx-auto',
                         plugin.isPending
                           ? plugin.isBuilding
-                            ? 'bg-red-600'
-                            : 'bg-green-500'
-                          : 'bg-gray-300',
+                            ? buildingColor
+                            : pendingColor
+                          : privateColor,
                       )}
                     />
                   </td>

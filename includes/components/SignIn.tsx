@@ -42,7 +42,7 @@ const SignIn = () => {
   return (
     <div className="flex justify-center align-middle h-full min-h-screen bg-gray-100">
       <div className="shadow-2xl m-auto px-10 pb-4 rounded-xl bg-gray-50">
-        <div className="mb-6">
+        <div className="mb-6 px-16">
           <img src="/collapp.svg" className="mx-auto mb-0 w-40" />
           <h1 className="text-center font-medium text-2xl">
             Collap Admin Panel
@@ -50,7 +50,7 @@ const SignIn = () => {
         </div>
 
         {emailSent ? (
-          <div className="flex items-center justify-center space-x-2">
+          <div className="flex items-center justify-center space-x-2 pb-4">
             <AiOutlineMail />
             <h2>Check your email inbox</h2>
           </div>

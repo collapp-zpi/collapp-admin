@@ -13,7 +13,6 @@ import { prisma } from 'shared/utils/prismaClient'
 import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 import { amazonUrl } from 'shared/utils/awsHelpers'
-import axios from 'axios'
 
 @NextAuthGuard()
 class Plugins {
@@ -151,16 +150,23 @@ class Plugins {
       },
     })
 
-    axios.post('https://collapp-build-server.herokuapp.com/build', {
-      requestId: id,
-      name: pluginToBeBuilt.name,
-      developer: {
-        name: pluginToBeBuilt.author.name,
-        email: pluginToBeBuilt.author.email,
+    fetch('https://collapp-build-server.herokuapp.com/build', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      zip: {
-        url: amazonUrl + pluginToBeBuilt.source?.url,
-      },
+      body: JSON.stringify({
+        requestId: id,
+        name: pluginToBeBuilt.name,
+        developer: {
+          name: pluginToBeBuilt.author.name,
+          email: pluginToBeBuilt.author.email,
+        },
+        zip: {
+          url: amazonUrl + pluginToBeBuilt.source?.url,
+        },
+      }),
     })
 
     return pluginToBeBuilt

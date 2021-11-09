@@ -149,19 +149,21 @@ const Plugin = (
             <div className="flex items-center">
               <img
                 src={icon || '/collapp.svg'}
-                className="w-40 h-40 rounded-2xl border-2"
+                className="w-40 h-40 rounded-lg border-2"
               />
-              <div className="flex flex-col ml-8">
+              <div className="flex flex-col ml-8 -mb-10">
                 <h1 className="text-4xl font-bold">{name}</h1>
-                <p className="mt-4">{dayjs(createdAt).format('LLL')}</p>
+                <p className="mt-4 font-light text-sm">
+                  {dayjs(createdAt).format('LLL')}
+                </p>
               </div>
             </div>
             <p className="text-center italic p-2 my-12 rounded-lg bg-gray-100 border-2">
               "{!!description ? description : '-'}"
             </p>
-            <div className="flex justify-around space-x-8 mb-8">
+            <div className="flex justify-around space-x-8 mb-8 mt-2">
               <InputRangeFrame
-                className="mt-2 flex-1"
+                className="mx-4 flex-1"
                 label="Height"
                 display={
                   minHeight === maxHeight
@@ -179,7 +181,7 @@ const Plugin = (
               </InputRangeFrame>
 
               <InputRangeFrame
-                className="mt-2 flex-1"
+                className="flex-1 mx-4"
                 label="Width"
                 display={
                   minWidth === maxWidth ? minWidth : `${minWidth} - ${maxWidth}`

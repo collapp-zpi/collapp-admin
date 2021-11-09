@@ -272,18 +272,25 @@ const Plugin = (
           </div>
           {!!data.logs.length && (
             <div className="bg-gray-50 shadow-2xl py-8 px-16 rounded-2xl mb-4">
+              <h1 className="text-gray-700 font-bold text-2xl mb-4">Logs</h1>
               <table>
                 <tbody>
                   {data.logs.map((log: PluginLog) => (
                     <tr key={log.id} className="text-gray-500 text-sm mt-2">
-                      <td className="pr-8">{dayjs(log.date).format('LLL')}</td>
-                      <td>{log.content}</td>
-                      {!!log.admin && (
-                        <td className="ml-1">
-                          by admin{' '}
-                          <span className=" underline">{log.admin?.email}</span>
-                        </td>
-                      )}
+                      <td className="py-1 px-4">
+                        {dayjs(log.date).format('LLL')}
+                      </td>
+                      <td className="py-1 px-4 flex">
+                        {log.content}
+                        {!!log.admin && (
+                          <p className="ml-1">
+                            {'by admin '}
+                            <span className="underline font-semibold">
+                              {log.admin?.email}
+                            </span>
+                          </p>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

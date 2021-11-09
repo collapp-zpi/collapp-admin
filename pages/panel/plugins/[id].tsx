@@ -158,10 +158,13 @@ const Plugin = (
                 </p>
               </div>
             </div>
-            <p className="text-center italic p-2 my-12 rounded-lg bg-gray-100 border-2">
-              "{!!description ? description : '-'}"
-            </p>
-            <div className="flex justify-around space-x-8 mb-8 mt-2">
+            {!!description && (
+              <p className="text-center italic p-2 mt-12 rounded-lg bg-gray-100 border-2">
+                "{description}"
+              </p>
+            )}
+
+            <div className="flex justify-around space-x-8 mb-8 mt-12">
               <InputRangeFrame
                 className="mx-4 flex-1"
                 label="Height"

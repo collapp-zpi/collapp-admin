@@ -70,25 +70,23 @@ class Plugins {
       throw new UnauthorizedException('Only admins can reject plugins.')
     }
 
-    await prisma.pluginLog.create({
-      data: {
-        content: 'Rejected',
-        admin: {
-          connect: {
-            id: admin.id,
-          },
-        },
-        plugin: {
-          connect: {
-            id,
-          },
-        },
-      },
-    })
-
     return await prisma.draftPlugin.update({
       where: { id },
-      data: { isPending: false },
+      data: {
+        isPending: false,
+        logs: {
+          create: [
+            {
+              content: 'Rejected',
+              admin: {
+                connect: {
+                  id: admin.id,
+                },
+              },
+            },
+          ],
+        },
+      },
     })
   }
 
@@ -123,26 +121,22 @@ class Plugins {
       throw new UnauthorizedException('Only admins can accept plugins.')
     }
 
-    await prisma.pluginLog.create({
-      data: {
-        content: 'Accepted',
-        admin: {
-          connect: {
-            id: admin.id,
-          },
-        },
-        plugin: {
-          connect: {
-            id,
-          },
-        },
-      },
-    })
-
     const pluginToBeBuilt = await prisma.draftPlugin.update({
       where: { id },
       data: {
         isBuilding: true,
+        logs: {
+          create: [
+            {
+              content: 'Accepted',
+              admin: {
+                connect: {
+                  id: admin.id,
+                },
+              },
+            },
+          ],
+        },
       },
       include: {
         source: true,

@@ -8,6 +8,7 @@ import {
   pendingColor,
   privateColor,
 } from 'includes/utils/statusColors'
+import { truncate } from 'shared/utils/text'
 
 const StatusColors = () => (
   <div className="flex justify-end items-center mt-5">
@@ -30,17 +31,18 @@ const PluginsList = ({
   isCompact: boolean
 }) => {
   const { padding, imgSize }: { padding: string; imgSize: string } = !isCompact
-    ? { padding: 'px-8 py-4', imgSize: 'w-32 h-32 rounded-full' }
-    : { padding: 'px-6 py-2', imgSize: 'w-20 h-20 rounded-full' }
+    ? { padding: 'px-4 py-4', imgSize: 'w-32 h-32 rounded-full' }
+    : { padding: 'px-2 py-2', imgSize: 'w-20 h-20 rounded-full' }
   return (
     <div>
       {!isCompact && <StatusColors />}
       <div className="flex justify-center m-auto bg-gray-50 shadow-2xl p-8 rounded-2xl">
         <table className="text-center flex-1">
-          <thead className="px-6 py-4">
+          <thead className={padding}>
             <tr>
               <th className="px-2 py-4"></th>
               <th className={padding}>Name</th>
+              <th className={padding}>Description</th>
               <th className={padding}>Date</th>
               <th className={padding}>Status</th>
             </tr>
@@ -57,7 +59,18 @@ const PluginsList = ({
                     />
                   </td>
                   <td className={padding}>{plugin.name}</td>
-                  <td className={padding}>
+                  <td
+                    className={`break-words ${
+                      isCompact ? 'max-w-xs' : 'max-w-sm'
+                    } px-4 py-2`}
+                  >
+                    {truncate(plugin.description, isCompact ? 50 : 100)}
+                  </td>
+                  <td
+                    className={`break-words ${
+                      isCompact ? 'max-w-xs' : 'max-w-sm'
+                    } ${padding}`}
+                  >
                     {dayjs(plugin.createdAt).format('LLL')}
                   </td>
                   <td className={padding}>

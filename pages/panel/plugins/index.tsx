@@ -17,10 +17,27 @@ import { useRouter } from 'next/router'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
+import { InputSelect } from 'shared/components/input/InputSelect'
 
 const filtersSchema = object().shape({
   name: string().default(''),
+  status: string().nullable(),
 })
+
+const PluginStatus = [
+  {
+    label: 'Private',
+    value: 'Private',
+  },
+  {
+    label: 'Pending',
+    value: 'Pending',
+  },
+  {
+    label: 'Updating',
+    value: 'Updating',
+  },
+]
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
@@ -82,10 +99,25 @@ function Plugins(
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
-        <div className="mx-24 my-3 shadow-sm">
-          <FiltersForm schema={filtersSchema}>
-            <InputText icon={AiOutlineSearch} name="name" label="Plugin name" />
-          </FiltersForm>
+        <div className="mx-24 mt-4">
+          <div className="bg-white p-6 rounded-3xl shadow-xl mb-4">
+            <FiltersForm schema={filtersSchema}>
+              <div className="flex flex-col md:flex-row">
+                <InputSelect
+                  label="Status"
+                  name="status"
+                  options={PluginStatus}
+                  className="w-full md:w-64 mr-2 mb-2 md:mb-0"
+                />
+                <InputText
+                  icon={AiOutlineSearch}
+                  name="name"
+                  label="Plugin name"
+                  className="flex-grow"
+                />
+              </div>
+            </FiltersForm>
+          </div>
         </div>
 
         {!data && (
@@ -115,4 +147,4 @@ function Plugins(
   )
 }
 
-export default withFilters(Plugins, ['limit', 'page', 'name'])
+export default withFilters(Plugins, ['limit', 'page', 'name', 'status'])

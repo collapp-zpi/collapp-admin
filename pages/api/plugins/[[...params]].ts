@@ -14,6 +14,12 @@ import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
 import { amazonUrl } from 'shared/utils/awsHelpers'
 
+enum Status {
+  Private = 'Private',
+  Pending = 'Pending',
+  Updating = 'Updating',
+}
+
 @NextAuthGuard()
 class Plugins {
   @Get()
@@ -21,10 +27,25 @@ class Plugins {
     @Query('limit', ParseNumberPipe({ nullable: true })) limit?: number,
     @Query('page', ParseNumberPipe({ nullable: true })) page?: number,
     @Query('name') name?: string,
-    // @Query('status') status?: string, // TODO: filter by status
+    @Query('status') status?: Status,
   ) {
     return await fetchWithPagination('draftPlugin', limit, page, {
       ...(name && { name: { contains: name, mode: 'insensitive' } }),
+      ...(status === Status.Private && {
+        isPending: false,
+      }),
+      ...(status === Status.Pending && {
+        isPending: true,
+        published: null,
+      }),
+      ...(status === Status.Updating && {
+        isPending: true,
+        NOT: [
+          {
+            published: null,
+          },
+        ],
+      }),
     })
   }
 

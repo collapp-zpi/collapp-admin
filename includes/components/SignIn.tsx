@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { object, string } from 'yup'
-import SubmitButton from '../../shared/components/button/SubmitButton'
-import { UncontrolledForm } from '../../shared/components/form/UncontrolledForm'
-import { InputText } from '../../shared/components/input/InputText'
+import SubmitButton from 'shared/components/button/SubmitButton'
+import { UncontrolledForm } from 'shared/components/form/UncontrolledForm'
+import { InputText } from 'shared/components/input/InputText'
 import { MdAlternateEmail } from 'react-icons/md'
 import { signIn } from 'next-auth/react'
 import { RedirectableProviderType } from 'next-auth/providers'
@@ -40,32 +40,33 @@ const SignIn = () => {
   }
 
   return (
-    <div className="flex justify-center align-middle h-full min-h-screen bg-gray-100">
-      <div className="shadow-2xl m-auto px-10 pb-4 rounded-xl bg-gray-50">
-        <div className="mb-6 px-16">
-          <img src="/collapp.svg" className="mx-auto mb-0 w-40" />
-          <h1 className="text-center font-medium text-2xl">
-            Collap Admin Panel
+    <div className="flex justify-center align-middle h-full min-h-screen bg-gray-100 text-gray-500 p-8">
+      <div className="shadow-2xl m-auto p-8 rounded-3xl bg-gray-50">
+        <div className="mb-12">
+          <img src="/collapp.svg" className="mx-auto w-24" />
+          <h1 className="text-center font-bold text-2xl">
+            Collapp Admin Panel
           </h1>
         </div>
 
         {emailSent ? (
-          <div className="flex items-center justify-center space-x-2 pb-4">
-            <AiOutlineMail />
-            <h2>Check your email inbox</h2>
+          <div className="flex flex-col md:flex-row items-center justify-center space-x-2 text-center">
+            <AiOutlineMail className="flex-shrink-0" />
+            <h2>The email has been sent to your inbox</h2>
           </div>
         ) : (
           <UncontrolledForm
             {...{ schema, query, onSuccess, onError }}
-            className="flex"
+            className="flex flex-col"
           >
             <InputText
               type="email"
               name="email"
               label="Email"
+              autoComplete="email"
               icon={MdAlternateEmail}
             />
-            <SubmitButton className="h-12" />
+            <SubmitButton className="mt-2" />
           </UncontrolledForm>
         )}
       </div>

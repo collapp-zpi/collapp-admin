@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import NavigationPanel from './NavigationPanel'
 import SignIn from './SignIn'
@@ -9,7 +9,7 @@ const LoadingSessionLayout = ({ children }: { children: ReactNode }) => {
 
   if (status === 'loading') {
     return (
-      <div className="flex justify-center align-middle h-full min-h-screen">
+      <div className="flex justify-center align-middle h-full min-h-screen text-gray-500 bg-gray-100">
         <LogoSpinner />
       </div>
     )

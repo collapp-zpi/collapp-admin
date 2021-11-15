@@ -12,11 +12,9 @@ import { object, string } from 'yup'
 import { InputText } from 'shared/components/input/InputText'
 import { FiltersForm } from 'shared/components/form/FiltersForm'
 import { AiOutlineSearch } from 'react-icons/ai'
-import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
-import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import { InputSelect } from 'shared/components/input/InputSelect'
 
 const filtersSchema = object().shape({
@@ -73,7 +71,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 function Plugins(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const router = useRouter()
   const [, setFilters] = useFilters()
   const { data } = useQuery('plugins', '/api/plugins')
 
@@ -91,37 +88,27 @@ function Plugins(
         <title>Plugins</title>
       </Head>
       <NavigationPanel>
-        <Button
-          color="light"
-          onClick={() => router.back()}
-          className="mr-auto mt-3 ml-3 border-2 border-gray-400"
-        >
-          <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
-          Back
-        </Button>
-        <div className="mx-24 mt-4">
-          <div className="bg-white p-6 rounded-3xl shadow-xl mb-4">
-            <FiltersForm schema={filtersSchema}>
-              <div className="flex flex-col md:flex-row">
-                <InputSelect
-                  label="Status"
-                  name="status"
-                  options={PluginStatus}
-                  className="w-full md:w-64 mr-2 mb-2 md:mb-0"
-                />
-                <InputText
-                  icon={AiOutlineSearch}
-                  name="name"
-                  label="Plugin name"
-                  className="flex-grow"
-                />
-              </div>
-            </FiltersForm>
-          </div>
+        <div className="bg-white p-6 rounded-3xl shadow-xl mb-4">
+          <FiltersForm schema={filtersSchema}>
+            <div className="flex flex-col md:flex-row">
+              <InputSelect
+                label="Status"
+                name="status"
+                options={PluginStatus}
+                className="w-full md:w-64 mr-2 mb-2 md:mb-0"
+              />
+              <InputText
+                icon={AiOutlineSearch}
+                name="name"
+                label="Plugin name"
+                className="flex-grow"
+              />
+            </div>
+          </FiltersForm>
         </div>
 
         {!data && (
-          <div className="m-auto">
+          <div className="m-auto m-12">
             <LogoSpinner />
           </div>
         )}
@@ -131,8 +118,10 @@ function Plugins(
           </div>
         )}
         {!!data && !!data.entities?.length && (
-          <div className="my-auto mx-24">
-            <PluginsList plugins={data?.entities} isCompact={false} />
+          <div className="my-auto">
+            <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
+              <PluginsList plugins={data?.entities} />
+            </div>
             <div className="mb-6">
               <Pagination
                 page={data?.pagination.page}

@@ -9,89 +9,78 @@ import {
   privateColor,
 } from 'includes/utils/statusColors'
 import { truncate } from 'shared/utils/text'
-
-const StatusColors = () => (
-  <div className="flex justify-end items-center mt-5">
-    <div className={`w-4 h-4 rounded-full ${privateColor}`} />
-    <p>-Private</p>
-
-    <div className={`ml-3 w-4 h-4 rounded-full ${pendingColor}`} />
-    <p>-Pending</p>
-
-    <div className={`ml-3 w-4 h-4 rounded-full ${buildingColor}`} />
-    <p>-Building</p>
-  </div>
-)
+import { Tooltip } from 'shared/components/Tooltip'
 
 const PluginsList = ({
   plugins,
-  isCompact,
+  isCompact = false,
 }: {
   plugins: DraftPlugin[]
-  isCompact: boolean
+  isCompact?: boolean
 }) => {
-  const { padding, imgSize }: { padding: string; imgSize: string } = !isCompact
-    ? { padding: 'px-4 py-4', imgSize: 'w-32 h-32 rounded-full' }
-    : { padding: 'px-2 py-2', imgSize: 'w-20 h-20 rounded-full' }
+  const { padding, imgSize } = isCompact
+    ? { padding: 'p-3', imgSize: 'w-6 h-6 rounded-25' }
+    : { padding: 'p-4', imgSize: 'w-8 h-8 rounded-25' }
+
   return (
-    <div>
-      {!isCompact && <StatusColors />}
-      <div className="flex justify-center m-auto bg-gray-50 shadow-2xl p-8 rounded-2xl">
-        <table className="text-center flex-1">
-          <thead className={padding}>
-            <tr>
-              <th className="px-2 py-4"></th>
-              <th className={padding}>Name</th>
-              <th className={padding}>Description</th>
-              <th className={padding}>Date</th>
-              <th className={padding}>Status</th>
+    <table className="flex-1 w-full">
+      <thead>
+        <tr>
+          <th className={classNames(padding, 'text-left')}>Name</th>
+          <th className={classNames(padding, 'text-left')}>Description</th>
+          <th className={classNames(padding, 'text-left')}>Date</th>
+          <th className={classNames(padding, 'text-left')}>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {plugins.map((plugin: DraftPlugin) => (
+          <Link key={plugin.id} href={`/panel/plugins/${plugin.id}`} passHref>
+            <tr style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
+              <td className={classNames(padding, 'flex items-center')}>
+                <img
+                  src={plugin.icon || '/collapp.svg'}
+                  className={classNames(
+                    imgSize,
+                    'shadow-lg mr-3 bg-gray-150 rounded-25 bg-white',
+                  )}
+                  alt="Plugin icon"
+                />
+                {truncate(plugin.name, 50)}
+              </td>
+
+              <td className={padding}>
+                {truncate(plugin.description, isCompact ? 50 : 100)}
+              </td>
+              <td className={classNames(padding, 'text-sm break-normal')}>
+                {dayjs(plugin.createdAt).format('LLL')}
+              </td>
+              <td className={padding}>
+                <Tooltip
+                  value={
+                    plugin.isBuilding
+                      ? 'Building'
+                      : plugin.isPending
+                      ? 'Pending'
+                      : 'Draft'
+                  }
+                >
+                  <div
+                    className={classNames(
+                      'w-4 h-4 rounded-full',
+                      plugin.isBuilding
+                        ? buildingColor
+                        : plugin.isPending
+                        ? pendingColor
+                        : privateColor,
+                    )}
+                  />
+                </Tooltip>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {plugins.map((plugin: DraftPlugin) => (
-              <Link key={plugin.id} href={`/panel/plugins/${plugin.id}`}>
-                <tr style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
-                  <td className="px-2 py-4">
-                    <img
-                      src={plugin.icon || '/collapp.svg'}
-                      alt="Plugin Icon"
-                      className={`${imgSize} border-2 border-gray-300`}
-                    />
-                  </td>
-                  <td className={padding}>{plugin.name}</td>
-                  <td
-                    className={`break-words ${
-                      isCompact ? 'max-w-xs' : 'max-w-sm'
-                    } px-4 py-2`}
-                  >
-                    {truncate(plugin.description, isCompact ? 50 : 100)}
-                  </td>
-                  <td
-                    className={`break-words ${
-                      isCompact ? 'max-w-xs' : 'max-w-sm'
-                    } ${padding}`}
-                  >
-                    {dayjs(plugin.createdAt).format('LLL')}
-                  </td>
-                  <td className={padding}>
-                    <div
-                      className={classNames(
-                        'w-4 h-4 rounded-full mx-auto',
-                        plugin.isPending
-                          ? plugin.isBuilding
-                            ? buildingColor
-                            : pendingColor
-                          : privateColor,
-                      )}
-                    />
-                  </td>
-                </tr>
-              </Link>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </Link>
+        ))}
+      </tbody>
+    </table>
   )
 }
 

@@ -106,14 +106,11 @@ const Developer = (
               <LogoSpinner />
             </div>
           ) : data?.entities.length ? (
-            <div className="bg-gray-50 rounded-2xl shadow-2xl pt-6 mb-4">
-              <h2 className="text-xl font-medium text-center">
+            <div className="bg-gray-50 rounded-2xl shadow-2xl p-8 mb-4">
+              <h2 className="text-xl font-bold ml-2 mb-4">
                 Developer's plugins:
               </h2>
-              <PluginsList
-                plugins={data?.entities}
-                isCompact={true}
-              ></PluginsList>
+              <PluginsList plugins={data?.entities} isCompact={true} />
             </div>
           ) : (
             <p className="ml-2">Developers hasn't created any plugins yet</p>

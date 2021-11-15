@@ -11,6 +11,7 @@ import Head from 'next/head'
 import { DeveloperUser } from '@prisma/client'
 import { truncate } from 'shared/utils/text'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
+import { withAuth } from 'shared/hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page'])
@@ -111,4 +112,4 @@ function Developers() {
   )
 }
 
-export default withFilters(Developers, ['limit', 'page'])
+export default withAuth(withFilters(Developers, ['limit', 'page']))

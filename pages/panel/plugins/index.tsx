@@ -1,4 +1,4 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from 'next'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import NavigationPanel from 'includes/components/NavigationPanel'
@@ -6,15 +6,15 @@ import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { generateKey, objectPick } from 'shared/utils/object'
-import ErrorPage from 'includes/components/ErrorPage'
 import { useQuery } from 'shared/hooks/useQuery'
 import { object, string } from 'yup'
 import { InputText } from 'shared/components/input/InputText'
 import { FiltersForm } from 'shared/components/form/FiltersForm'
 import { AiOutlineSearch } from 'react-icons/ai'
-import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
 import { InputSelect } from 'shared/components/input/InputSelect'
+import { withAuth } from 'shared/hooks/useAuth'
+import { ErrorInfo } from 'shared/components/ErrorInfo'
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -51,10 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (!res.ok) {
     return {
-      props: {
-        error: await res.json(),
-        isError: true,
-      },
+      props: { error: await res.json() },
     }
   }
 
@@ -67,19 +64,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-function Plugins(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+function Plugins() {
   const [, setFilters] = useFilters()
-  const { data } = useQuery('plugins', '/api/plugins')
-
-  if (props.isError) {
-    return (
-      <LoadingSessionLayout>
-        <ErrorPage {...props.error} />
-      </LoadingSessionLayout>
-    )
-  }
+  const { data, error } = useQuery('plugins', '/api/plugins')
 
   return (
     <div>
@@ -106,18 +93,20 @@ function Plugins(
           </FiltersForm>
         </div>
 
-        {!data && (
+        {!!error ? (
+          <div className="mt-12">
+            <ErrorInfo error={error} />
+          </div>
+        ) : !data ? (
           <div className="m-auto p-12">
             <LogoSpinner />
           </div>
-        )}
-        {!!data && !data.entities?.length && (
+        ) : !data.entities?.length ? (
           <div className="bg-white p-20 rounded-3xl shadow-2xl text-gray-600 text-center text-lg m-auto">
             No plugins found
           </div>
-        )}
-        {!!data && !!data.entities?.length && (
-          <div className="my-auto">
+        ) : (
+          <>
             <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
               <PluginsList plugins={data?.entities} />
             </div>
@@ -128,11 +117,13 @@ function Plugins(
                 setPage={(page) => setFilters({ page: String(page) })}
               />
             </div>
-          </div>
+          </>
         )}
       </NavigationPanel>
     </div>
   )
 }
 
-export default withFilters(Plugins, ['limit', 'page', 'name', 'status'])
+export default withAuth(
+  withFilters(Plugins, ['limit', 'page', 'name', 'status']),
+)

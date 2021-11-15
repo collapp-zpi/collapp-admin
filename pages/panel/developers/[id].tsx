@@ -1,8 +1,6 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
-import ErrorPage from 'includes/components/ErrorPage'
-import LoadingSessionLayout from 'includes/components/LoadingSession'
 import NavigationPanel from 'includes/components/NavigationPanel'
 import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
@@ -11,9 +9,14 @@ import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
-import { withFallback } from 'shared/hooks/useApiForm'
+import { withAuth } from 'shared/hooks/useAuth'
+import { useFilters, withFilters } from 'shared/hooks/useFilters'
+import { Pagination } from 'shared/components/Pagination'
+import { ErrorInfo } from 'shared/components/ErrorInfo'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   const { id } = context.query
   const developerRes = await fetch(
     `${process.env.BASE_URL}/api/developers/${id}`,
@@ -27,10 +30,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   )
 
-  let isError = !developerRes.ok
-
-  if (isError) {
-    return { props: { error: await developerRes.json(), isError } }
+  if (!developerRes.ok) {
+    return { props: { error: await developerRes.json() } }
   }
 
   const pluginsRes = await fetch(
@@ -45,39 +46,36 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   )
 
-  isError = !pluginsRes.ok
-  if (isError) {
-    return { props: { error: await pluginsRes.json(), isError } }
+  if (!pluginsRes.ok) {
+    return { props: { error: await pluginsRes.json() } }
   }
 
   return {
     props: {
-      developer: await developerRes.json(),
       fallback: {
-        [generateKey('plugins', String(id))]: await pluginsRes.json(),
+        [generateKey('developers', String(id))]: await developerRes.json(),
+        [generateKey('developers', String(id), 'plugins')]:
+          await pluginsRes.json(),
       },
     },
   }
 }
 
-const Developer = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) => {
-  if (props.isError) {
-    return (
-      <LoadingSessionLayout>
-        <ErrorPage {...props.error} />
-      </LoadingSessionLayout>
-    )
-  }
-
+const Developer = () => {
+  const [, setFilters] = useFilters()
   const router = useRouter()
   const pathId = String(router.query.id)
-  const { data } = useQuery(
-    ['plugins', pathId],
+  const developer = useQuery(
+    ['developers', pathId],
+    `/api/developers/${pathId}`,
+    {
+      ignoreFilters: true,
+    },
+  )
+  const developerPlugins = useQuery(
+    ['developers', pathId, 'plugins'],
     `/api/developers/${pathId}/plugins`,
   )
-  const { image, name, email } = props.developer
 
   return (
     <div>
@@ -89,36 +87,66 @@ const Developer = (
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
-        <div className="m-auto">
-          <div className="flex bg-white shadow-2xl p-8 rounded-3xl items-center my-4">
-            <img
-              src={image}
-              alt="User image"
-              className="w-36 h-36 rounded-25 border-2 border-gray-200"
-            />
-            <div className="flex flex-col ml-8">
-              <h1 className="text-3xl font-bold">{name}</h1>
-              {email && <p className="mt-2">{email}</p>}
-            </div>
+        {developer.error ? (
+          <div className="mt-12">
+            <ErrorInfo error={developer.error} />
           </div>
-          {!data ? (
-            <div className="m-auto">
-              <LogoSpinner />
+        ) : !developer.data ? (
+          <div className="m-auto p-12">
+            <LogoSpinner />
+          </div>
+        ) : (
+          <div className="m-auto">
+            <div className="flex bg-white shadow-2xl p-8 rounded-3xl items-center my-4">
+              <img
+                src={developer.data.image}
+                alt="User image"
+                className="w-36 h-36 rounded-25 border-2 border-gray-200"
+              />
+              <div className="flex flex-col ml-8">
+                <h1 className="text-3xl font-bold">{developer.data.name}</h1>
+                {developer.data?.email && (
+                  <p className="mt-2">{developer.data.email}</p>
+                )}
+              </div>
             </div>
-          ) : data?.entities.length ? (
-            <div className="bg-white rounded-3xl shadow-2xl p-8 mb-4">
-              <h2 className="text-xl font-bold ml-2 mb-4">
-                Developer's plugins:
-              </h2>
-              <PluginsList plugins={data?.entities} isCompact={true} />
-            </div>
-          ) : (
-            <p className="ml-2">Developers hasn't created any plugins yet</p>
-          )}
-        </div>
+            {developerPlugins.error ? (
+              <div className="mt-12">
+                <ErrorInfo error={developer.error} />
+              </div>
+            ) : !developerPlugins.data ? (
+              <div className="m-auto p-12">
+                <LogoSpinner />
+              </div>
+            ) : (
+              <div className="bg-white rounded-3xl shadow-2xl p-8 mb-4">
+                <h2 className="text-xl font-bold ml-2 mb-4">
+                  Developer's plugins:
+                </h2>
+                {!developerPlugins.data.entities.length ? (
+                  <p>Developers hasn't created any plugins yet</p>
+                ) : (
+                  <>
+                    <PluginsList
+                      plugins={developerPlugins.data.entities}
+                      isCompact={true}
+                    />
+                    <div className="mt-6">
+                      <Pagination
+                        page={developerPlugins.data.pagination.page}
+                        pages={developerPlugins.data.pagination.pages}
+                        setPage={(page) => setFilters({ page: String(page) })}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </NavigationPanel>
     </div>
   )
 }
 
-export default withFallback(Developer)
+export default withAuth(withFilters(Developer, ['limit', 'page']))

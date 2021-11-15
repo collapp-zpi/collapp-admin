@@ -1,18 +1,16 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import React from 'react'
-import ErrorPage from 'includes/components/ErrorPage'
 import NavigationPanel from 'includes/components/NavigationPanel'
 import { generateKey, objectPick } from 'shared/utils/object'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
-import { useRouter } from 'next/router'
 import { useQuery } from 'shared/hooks/useQuery'
 import { Pagination } from 'shared/components/Pagination'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
-import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
 import { DeveloperUser } from '@prisma/client'
 import { truncate } from 'shared/utils/text'
+import { ErrorInfo } from 'shared/components/ErrorInfo'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page'])
@@ -29,10 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (!res.ok) {
     return {
-      props: {
-        error: await res.json(),
-        isError: true,
-      },
+      props: { error: await res.json() },
     }
   }
 
@@ -45,19 +40,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-function Developers(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
+function Developers() {
   const [, setFilters] = useFilters()
-  const { data } = useQuery('developers', '/api/developers')
-
-  if (props.isError) {
-    return (
-      <LoadingSessionLayout>
-        <ErrorPage {...props.error} />
-      </LoadingSessionLayout>
-    )
-  }
+  const { data, error } = useQuery('developers', '/api/developers')
 
   return (
     <div>
@@ -65,17 +50,19 @@ function Developers(
         <title>Developers</title>
       </Head>
       <NavigationPanel>
-        {!data && (
-          <div className="m-auto">
+        {!!error ? (
+          <div className="mt-12">
+            <ErrorInfo error={error} />
+          </div>
+        ) : !data ? (
+          <div className="m-auto p-12">
             <LogoSpinner />
           </div>
-        )}
-        {!!data && !data.entities?.length && (
-          <div className="bg-white p-12 rounded-3xl shadow-2xl text-gray-400 text-center text-lg m-auto">
+        ) : !data.entities?.length ? (
+          <div className="bg-white p-20 rounded-3xl shadow-2xl text-gray-600 text-center text-lg m-auto">
             No developers found
           </div>
-        )}
-        {!!data && !!data.entities?.length && (
+        ) : (
           <>
             <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
               <table className="flex-1 w-full">

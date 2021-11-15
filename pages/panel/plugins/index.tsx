@@ -121,7 +121,7 @@ function Plugins(
             <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
               <PluginsList plugins={data?.entities} />
             </div>
-            <div className="mb-6">
+            <div className="mt-6">
               <Pagination
                 page={data?.pagination.page}
                 pages={data?.pagination.pages}

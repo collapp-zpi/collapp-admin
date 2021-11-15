@@ -48,7 +48,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 function Developers(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const router = useRouter()
   const [, setFilters] = useFilters()
   const { data } = useQuery('developers', '/api/developers')
 
@@ -111,7 +110,7 @@ function Developers(
                 </tbody>
               </table>
             </div>
-            <div className="mb-6">
+            <div className="mt-6">
               <Pagination
                 page={data?.pagination.page}
                 pages={data?.pagination.pages}

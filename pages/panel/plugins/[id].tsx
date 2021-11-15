@@ -176,7 +176,7 @@ const Plugin = (
               </div>
             </div>
             {!!description && (
-              <p className="text-center italic p-2 mt-12 rounded-lg bg-gray-100 border-2">
+              <p className="text-center italic p-2 mt-8 rounded-lg bg-gray-100 border-2">
                 "{description}"
               </p>
             )}

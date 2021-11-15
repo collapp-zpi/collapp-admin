@@ -19,23 +19,23 @@ const PluginsList = ({
   isCompact?: boolean
 }) => {
   const { padding, imgSize } = isCompact
-    ? { padding: 'p-3', imgSize: 'w-6 h-6 rounded-25' }
-    : { padding: 'p-4', imgSize: 'w-8 h-8 rounded-25' }
+    ? { padding: 'p-3', imgSize: 'w-6 h-6' }
+    : { padding: 'p-4', imgSize: 'w-8 h-8' }
 
   return (
     <table className="flex-1 w-full">
       <thead>
-        <tr>
-          <th className={classNames(padding, 'text-left')}>Name</th>
-          <th className={classNames(padding, 'text-left')}>Description</th>
-          <th className={classNames(padding, 'text-left')}>Date</th>
-          <th className={classNames(padding, 'text-left')}>Status</th>
+        <tr className="text-left">
+          <th className={padding}>Name</th>
+          <th className={padding}>Description</th>
+          <th className={padding}>Date</th>
+          <th className={padding}>Status</th>
         </tr>
       </thead>
       <tbody>
         {plugins.map((plugin: DraftPlugin) => (
           <Link key={plugin.id} href={`/panel/plugins/${plugin.id}`} passHref>
-            <tr style={{ cursor: 'pointer' }} className="hover:bg-gray-200">
+            <tr className="bg-blue-500 bg-opacity-0 hover:bg-opacity-10 cursor-pointer transition-colors">
               <td className={classNames(padding, 'flex items-center')}>
                 <img
                   src={plugin.icon || '/collapp.svg'}

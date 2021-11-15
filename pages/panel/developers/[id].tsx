@@ -85,20 +85,20 @@ const Developer = (
         <title>Developer</title>
       </Head>
       <NavigationPanel>
-        <Button
-          color="light"
-          onClick={() => router.back()}
-          className="mr-auto mt-3 ml-3 border-2 border-gray-400"
-        >
+        <Button color="light" onClick={() => router.back()}>
           <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
           Back
         </Button>
         <div className="m-auto">
-          <div className="flex bg-gray-50 shadow-2xl p-6 rounded-2xl items-center my-4 px-8">
-            <img src={image} alt="" className="w-52 h-52 rounded-2xl" />
+          <div className="flex bg-white shadow-2xl p-8 rounded-3xl items-center my-4">
+            <img
+              src={image}
+              alt="User image"
+              className="w-36 h-36 rounded-25 border-2 border-gray-200"
+            />
             <div className="flex flex-col ml-8">
-              <h1 className="text-4xl font-bold mt-8">{name}</h1>
-              <p className="mt-4">Email: {!email ? '-' : email}</p>
+              <h1 className="text-3xl font-bold">{name}</h1>
+              {email && <p className="mt-2">{email}</p>}
             </div>
           </div>
           {!data ? (
@@ -106,7 +106,7 @@ const Developer = (
               <LogoSpinner />
             </div>
           ) : data?.entities.length ? (
-            <div className="bg-gray-50 rounded-2xl shadow-2xl p-8 mb-4">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 mb-4">
               <h2 className="text-xl font-bold ml-2 mb-4">
                 Developer's plugins:
               </h2>

@@ -1,19 +1,18 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
-import DevelopersList from 'includes/components/DevelopersList'
 import ErrorPage from 'includes/components/ErrorPage'
 import NavigationPanel from 'includes/components/NavigationPanel'
 import { generateKey, objectPick } from 'shared/utils/object'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { useRouter } from 'next/router'
 import { useQuery } from 'shared/hooks/useQuery'
-import Button from 'shared/components/button/Button'
 import { Pagination } from 'shared/components/Pagination'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
-import { MdOutlineArrowBackIosNew } from 'react-icons/md'
+import { DeveloperUser } from '@prisma/client'
+import { truncate } from 'shared/utils/text'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page'])
@@ -67,14 +66,6 @@ function Developers(
         <title>Developers</title>
       </Head>
       <NavigationPanel>
-        <Button
-          color="light"
-          onClick={() => router.back()}
-          className="mr-auto mt-3 ml-3 border-2 border-gray-400"
-        >
-          <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
-          Back
-        </Button>
         {!data && (
           <div className="m-auto">
             <LogoSpinner />
@@ -87,7 +78,39 @@ function Developers(
         )}
         {!!data && !!data.entities?.length && (
           <>
-            <DevelopersList developers={data?.entities} />
+            <div className="bg-white px-8 py-4 rounded-3xl shadow-2xl overflow-x-auto">
+              <table className="flex-1 w-full">
+                <thead>
+                  <tr className="text-left">
+                    <th className="p-4">Name</th>
+                    <th className="p-4">Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.entities.map((developer: DeveloperUser) => (
+                    <Link
+                      key={developer.id}
+                      href={`/panel/developers/${developer.id}`}
+                      passHref
+                    >
+                      <tr className="bg-blue-500 bg-opacity-0 hover:bg-opacity-10 cursor-pointer transition-colors">
+                        <td className="p-4 flex items-center">
+                          <img
+                            src={developer.image || '/collapp.svg'}
+                            className="shadow-lg mr-3 bg-gray-150 rounded-25 bg-white w-8 h-8"
+                            alt="Developer image"
+                          />
+                          {truncate(developer?.name ?? '', 50)}
+                        </td>
+                        <td className="p-4">
+                          {truncate(developer?.email ?? '', 50)}
+                        </td>
+                      </tr>
+                    </Link>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <div className="mb-6">
               <Pagination
                 page={data?.pagination.page}

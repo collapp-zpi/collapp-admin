@@ -11,16 +11,12 @@ import dayjs from 'dayjs'
 import download from 'downloadjs'
 import { amazonUrl } from 'shared/utils/awsHelpers'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
-import {
-  BsPersonCircle,
-  BsFillCloudDownloadFill,
-  BsFillQuestionSquareFill,
-} from 'react-icons/bs'
+import { BsFileEarmarkZip, BsFillQuestionSquareFill, } from 'react-icons/bs'
 import {
   InputRangeFrame,
   PureInputRange,
 } from 'shared/components/input/InputRange'
-import { CgSpinner } from 'react-icons/cg'
+import { CgSoftwareDownload, CgSpinner } from 'react-icons/cg'
 import request from 'shared/utils/request'
 import toast from 'react-hot-toast'
 import { generateKey } from 'shared/utils/object'
@@ -28,7 +24,7 @@ import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { useQuery } from 'shared/hooks/useQuery'
 import { withFallback } from 'shared/hooks/useApiForm'
 import { useSWRConfig } from 'swr'
-import { PluginLog } from '.pnpm/@prisma+client@3.1.1_prisma@3.1.1/node_modules/.prisma/client'
+import Link from 'next/link'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -54,6 +50,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     },
   }
+}
+
+export const parseFileSize = (bytes: number) => {
+  if (!bytes) return '0 B'
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return (
+    (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + ['B', 'KB', 'MB', 'GB'][i]
+  )
 }
 
 const Plugin = (
@@ -92,12 +96,14 @@ const Plugin = (
     createdAt,
     source,
     authorId,
+    author,
     isPending,
     isBuilding,
     minHeight,
     maxHeight,
     minWidth,
     maxWidth,
+    logs,
   } = data
 
   const closeModal = () => {
@@ -130,30 +136,41 @@ const Plugin = (
     handleModalButtons(true)
   }
 
+  const canReview = isPending && !!source && !isBuilding
+
   return (
     <div>
       <Head>
         <title>Plugin</title>
       </Head>
       <NavigationPanel>
-        <Button
-          color="light"
-          onClick={() => router.back()}
-          className="mr-auto mt-3 ml-3 border-2 border-gray-400"
-        >
-          <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
-          Back
-        </Button>
-        <div className="m-auto">
-          <div className="bg-gray-50 shadow-2xl py-8 px-16 rounded-2xl mb-4">
+        <div className="flex justify-between">
+          <Button color="light" onClick={() => router.back()}>
+            <MdOutlineArrowBackIosNew className="mr-2 -ml-2" />
+            Back
+          </Button>
+          {canReview && (
+            <Button onClick={() => setVisible(true)}>
+              <BsFillQuestionSquareFill className="mr-2 -ml-2" />
+              Review
+            </Button>
+          )}
+        </div>
+        <div className="m-auto mt-4">
+          <div className="bg-white shadow-2xl p-8 rounded-3xl">
             <div className="flex items-center">
               <img
                 src={icon || '/collapp.svg'}
-                className="w-40 h-40 rounded-lg border-2"
+                className="w-36 h-36 rounded-25 border-2"
               />
-              <div className="flex flex-col ml-8 -mb-10">
-                <h1 className="text-4xl font-bold">{name}</h1>
-                <p className="mt-4 font-light text-sm">
+              <div className="flex flex-col ml-8">
+                <h1 className="text-3xl font-bold">{name}</h1>
+                <Link href={`/panel/developers/${authorId}`} passHref>
+                  <h3 className="font-bold text-blue-500 hover:text-blue-700 cursor-pointer transition-colors mt-1">
+                    {author?.name}
+                  </h3>
+                </Link>
+                <p className="mt-1 font-light text-sm">
                   {dayjs(createdAt).format('LLL')}
                 </p>
               </div>
@@ -176,7 +193,6 @@ const Plugin = (
               >
                 <PureInputRange
                   values={[minHeight, maxHeight]}
-                  onChange={() => {}}
                   min={1}
                   max={4}
                   disabled={true}
@@ -192,110 +208,98 @@ const Plugin = (
               >
                 <PureInputRange
                   values={[minWidth, maxWidth]}
-                  onChange={() => {}}
                   min={1}
                   max={4}
                   disabled={true}
                 />
               </InputRangeFrame>
             </div>
-            <div className="flex justify-around m-auto">
-              <div className="flex items-center justify-center space-x-4 my-3 mx-4">
-                <p>Author:</p>
-                <Button
-                  onClick={() => router.push(`/panel/developers/${authorId}`)}
-                >
-                  <BsPersonCircle className="mr-2 -ml-2" />
-                  Developer
-                </Button>
+          </div>
+          <div className="bg-white shadow-2xl p-8 rounded-3xl mt-4">
+            <h1 className="text-xl font-bold mb-4">File</h1>
+            <div className="flex items-center">
+              <div className="flex items-center justify-center py-2 pr-4 text-gray-400">
+                <BsFileEarmarkZip size="2rem" />
               </div>
-              {!!source && (
-                <div className="flex items-center justify-center space-x-4 my-3 mx-4">
-                  <p>Source:</p>
-                  <Button onClick={() => download(amazonUrl + source.url)}>
-                    <BsFillCloudDownloadFill className="mr-2 -ml-2" />
-                    Download
+              <div className="flex flex-col mr-auto">
+                <div className="font-bold">{source?.name}</div>
+                {!!source?.date && (
+                  <div className="text-sm">
+                    {dayjs(source?.date).format('LLL')}
+                  </div>
+                )}
+                <div className="text-sm text-gray-400">
+                  {parseFileSize(source?.size)}
+                </div>
+              </div>
+              <Button
+                hasIcon
+                color="light"
+                onClick={() => download(amazonUrl + source.url)}
+              >
+                <CgSoftwareDownload size="1.5rem" />
+              </Button>
+            </div>
+          </div>
+          <div className="bg-white shadow-2xl p-8 rounded-3xl mt-4">
+            <h1 className="text-xl font-bold mb-4">Logs</h1>
+            <table>
+              <thead>
+                <tr>
+                  <td className="py-2 px-3 font-bold">Date</td>
+                  <td className="py-2 px-3 font-bold">Message</td>
+                </tr>
+              </thead>
+              <tbody>
+                {logs.map(({ id, date, content, admin }) => (
+                  <tr key={id} className="text-gray-500 text-sm mt-2">
+                    <td className="py-1 px-4">{dayjs(date).format('LLL')}</td>
+                    <td className="py-1 px-4 flex">
+                      {content}
+                      {!!admin && (
+                        <p className="ml-1">
+                          {'by admin '}
+                          <span className="underline font-semibold">
+                            {admin?.email}
+                          </span>
+                        </p>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {canReview && (
+            <Modal visible={visible} close={() => closeModal()}>
+              <div className="flex flex-col m-8">
+                <h1 className="text-center text-3xl text-red-500">Careful!</h1>
+                <p className="py-8">
+                  What would you like to do with this plugin?
+                </p>
+                <div className="grid grid-cols-2 mt-4 gap-4">
+                  <Button
+                    onClick={handleAccept}
+                    disabled={rejecting || accepting}
+                  >
+                    {accepting && (
+                      <CgSpinner className="animate-spin mr-2 -ml-2" />
+                    )}
+                    Accept
+                  </Button>
+                  <Button
+                    color="red"
+                    onClick={handleReject}
+                    disabled={rejecting || accepting}
+                  >
+                    {rejecting && (
+                      <CgSpinner className="animate-spin mr-2 -ml-2" />
+                    )}
+                    Reject
                   </Button>
                 </div>
-              )}
-            </div>
-            {isPending && !!source && !isBuilding && (
-              <div className="mt-8">
-                <hr className="border-gray-300" />
-                <Button
-                  className="mx-auto mt-4"
-                  color="red"
-                  onClick={() => setVisible(true)}
-                >
-                  <BsFillQuestionSquareFill className="mr-2 -ml-2" />
-                  Decide
-                </Button>
-                <Modal visible={visible} close={() => closeModal()}>
-                  <div className="flex flex-col m-8">
-                    <h1 className="text-center text-3xl text-red-500">
-                      Carefully!
-                    </h1>
-                    <p className="py-8">
-                      What would you like to do with this plugin?
-                    </p>
-                    <div className="flex justify-evenly space-x-8 align-bottom mt-4">
-                      <Button
-                        className={`flex-1 transition-all ${
-                          (accepting || rejecting) && 'opacity-70'
-                        }`}
-                        onClick={handleAccept}
-                        disabled={rejecting || accepting}
-                      >
-                        {accepting && (
-                          <CgSpinner className="animate-spin mr-2 -ml-2" />
-                        )}
-                        Accept
-                      </Button>
-                      <Button
-                        className={`flex-1 border-2 border-red-500 transition-all ${
-                          (accepting || rejecting) && 'opacity-70'
-                        }`}
-                        color="red-link"
-                        onClick={handleReject}
-                        disabled={rejecting || accepting}
-                      >
-                        {rejecting && (
-                          <CgSpinner className="animate-spin mr-2 -ml-2" />
-                        )}
-                        Reject
-                      </Button>
-                    </div>
-                  </div>
-                </Modal>
               </div>
-            )}
-          </div>
-          {!!data.logs.length && (
-            <div className="bg-gray-50 shadow-2xl py-8 px-16 rounded-2xl mb-4">
-              <h1 className="text-gray-700 font-bold text-2xl mb-4">Logs</h1>
-              <table>
-                <tbody>
-                  {data.logs.map((log: PluginLog) => (
-                    <tr key={log.id} className="text-gray-500 text-sm mt-2">
-                      <td className="py-1 px-4">
-                        {dayjs(log.date).format('LLL')}
-                      </td>
-                      <td className="py-1 px-4 flex">
-                        {log.content}
-                        {!!log.admin && (
-                          <p className="ml-1">
-                            {'by admin '}
-                            <span className="underline font-semibold">
-                              {log.admin?.email}
-                            </span>
-                          </p>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            </Modal>
           )}
         </div>
       </NavigationPanel>

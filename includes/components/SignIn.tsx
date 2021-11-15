@@ -41,7 +41,7 @@ const SignIn = () => {
 
   return (
     <div className="flex justify-center align-middle h-full min-h-screen bg-gray-100 text-gray-500 p-8">
-      <div className="shadow-2xl m-auto p-8 rounded-3xl bg-gray-50">
+      <div className="shadow-2xl m-auto p-8 rounded-3xl bg-white">
         <div className="mb-12">
           <img src="/collapp.svg" className="mx-auto w-24" />
           <h1 className="text-center font-bold text-2xl">

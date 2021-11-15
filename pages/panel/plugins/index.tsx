@@ -12,7 +12,6 @@ import { object, string } from 'yup'
 import { InputText } from 'shared/components/input/InputText'
 import { FiltersForm } from 'shared/components/form/FiltersForm'
 import { AiOutlineSearch } from 'react-icons/ai'
-import { useRouter } from 'next/router'
 import LoadingSessionLayout from 'includes/components/LoadingSession'
 import Head from 'next/head'
 import { InputSelect } from 'shared/components/input/InputSelect'
@@ -108,7 +107,7 @@ function Plugins(
         </div>
 
         {!data && (
-          <div className="m-auto m-12">
+          <div className="m-auto p-12">
             <LogoSpinner />
           </div>
         )}

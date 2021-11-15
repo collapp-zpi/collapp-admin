@@ -54,7 +54,20 @@ class Plugins {
     const plugin = await prisma.draftPlugin.findFirst({
       where: { id },
       include: {
-        source: true,
+        source: {
+          select: {
+            date: true,
+            name: true,
+            size: true,
+            url: true,
+          },
+        },
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         logs: {
           include: {
             admin: true,

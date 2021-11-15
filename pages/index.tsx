@@ -16,7 +16,7 @@ const Home = () => {
       </Head>
       <LoadingSessionLayout>
         <div className="flex justify-center align-middle">
-          <div className="m-auto bg-gray-50 shadow-2xl p-12 rounded-3xl">
+          <div className="m-auto bg-white shadow-2xl p-12 rounded-3xl">
             <div className="flex flex-col text-center justify-center mb-16">
               <img src="/collapp.svg" className="mx-auto mb-0 w-24" />
               <h1 className="text-4xl font-bold">Welcome back!</h1>

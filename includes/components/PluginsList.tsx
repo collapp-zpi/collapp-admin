@@ -3,11 +3,6 @@ import { DraftPlugin } from '@prisma/client'
 import Link from 'next/link'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
-import {
-  buildingColor,
-  pendingColor,
-  privateColor,
-} from 'includes/utils/statusColors'
 import { truncate } from 'shared/utils/text'
 import { Tooltip } from 'shared/components/Tooltip'
 
@@ -68,10 +63,10 @@ const PluginsList = ({
                     className={classNames(
                       'w-4 h-4 rounded-full',
                       plugin.isBuilding
-                        ? buildingColor
+                        ? 'bg-yellow-500'
                         : plugin.isPending
-                        ? pendingColor
-                        : privateColor,
+                        ? 'bg-green-500'
+                        : 'bg-gray-300',
                     )}
                   />
                 </Tooltip>

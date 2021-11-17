@@ -131,6 +131,13 @@ class Plugins {
       include: {
         source: true,
         author: true,
+        published: {
+          select: {
+            source: {
+              select: { id: true },
+            },
+          },
+        },
       },
     })
 
@@ -155,6 +162,42 @@ class Plugins {
       throw new UnauthorizedException('Only admins can accept plugins.')
     }
 
+    // if plugin is updated and source has not been changed
+    if (
+      plugin.published?.source?.id &&
+      plugin.published.source.id === plugin.source.id
+    ) {
+      const updated = await prisma.publishedPlugin.update({
+        where: { id },
+        data: {
+          name: plugin.name,
+          description: plugin.description,
+          icon: plugin.icon,
+          minHeight: plugin.minHeight,
+          minWidth: plugin.minWidth,
+          maxHeight: plugin.maxHeight,
+          maxWidth: plugin.maxWidth,
+        },
+      })
+      await prisma.draftPlugin.update({
+        where: { id },
+        data: {
+          isPending: false,
+          logs: {
+            create: [
+              {
+                content: 'Accepted',
+                admin: {
+                  connect: { id: admin.id },
+                },
+              },
+            ],
+          },
+        },
+      })
+      return updated
+    }
+
     const pluginToBeBuilt = await prisma.draftPlugin.update({
       where: { id },
       data: {
@@ -164,9 +207,7 @@ class Plugins {
             {
               content: 'Accepted',
               admin: {
-                connect: {
-                  id: admin.id,
-                },
+                connect: { id: admin.id },
               },
             },
           ],

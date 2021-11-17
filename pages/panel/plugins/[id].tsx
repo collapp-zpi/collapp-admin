@@ -150,23 +150,6 @@ const Plugin = () => {
 
               <div className="flex justify-around space-x-8 mb-8 mt-12">
                 <InputRangeFrame
-                  className="mx-4 flex-1"
-                  label="Height"
-                  display={
-                    minHeight === maxHeight
-                      ? minHeight
-                      : `${minHeight} - ${maxHeight}`
-                  }
-                >
-                  <PureInputRange
-                    values={[minHeight, maxHeight]}
-                    min={1}
-                    max={4}
-                    disabled={true}
-                  />
-                </InputRangeFrame>
-
-                <InputRangeFrame
                   className="flex-1 mx-4"
                   label="Width"
                   display={
@@ -177,6 +160,23 @@ const Plugin = () => {
                 >
                   <PureInputRange
                     values={[minWidth, maxWidth]}
+                    min={1}
+                    max={4}
+                    disabled={true}
+                  />
+                </InputRangeFrame>
+
+                <InputRangeFrame
+                  className="mx-4 flex-1"
+                  label="Height"
+                  display={
+                    minHeight === maxHeight
+                      ? minHeight
+                      : `${minHeight} - ${maxHeight}`
+                  }
+                >
+                  <PureInputRange
+                    values={[minHeight, maxHeight]}
                     min={1}
                     max={4}
                     disabled={true}

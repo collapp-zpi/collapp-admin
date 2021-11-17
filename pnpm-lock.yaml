@@ -34,7 +34,7 @@ specifiers:
   prisma: ^3.1.1
   react: 17.0.2
   react-dom: ^17.0.2
-  react-hook-form: ^7.17.4
+  react-hook-form: ^7.19.5
   react-hot-toast: ^2.1.1
   react-icons: ^4.3.1
   react-range: ^1.8.11
@@ -51,8 +51,8 @@ dependencies:
   '@babel/core': 7.15.8
   '@babel/plugin-proposal-decorators': 7.15.8_@babel+core@7.15.8
   '@collapp/email-sdk': 2.0.0
-  '@hookform/error-message': 2.0.0_a04009854ca8c4f2ea0b2ec522d05223
-  '@hookform/resolvers': 2.8.2_react-hook-form@7.17.4
+  '@hookform/error-message': 2.0.0_179711dd7de287685c9248b7ee362f55
+  '@hookform/resolvers': 2.8.2_react-hook-form@7.19.5
   '@next-auth/prisma-adapter': 0.5.2-next.15_f83b4f02ed3900e328151dfffdacfa0c
   '@prisma/client': 3.1.1_prisma@3.1.1
   '@storyofams/next-api-decorators': 1.6.0_317d13b59b05a3a03ee7ba1d6890a343
@@ -70,7 +70,7 @@ dependencies:
   path-to-regexp: 6.2.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
-  react-hook-form: 7.17.4_react@17.0.2
+  react-hook-form: 7.19.5_react@17.0.2
   react-hot-toast: 2.1.1_react-dom@17.0.2+react@17.0.2
   react-icons: 4.3.1_react@17.0.2
   react-range: 1.8.11_react-dom@17.0.2+react@17.0.2
@@ -538,7 +538,7 @@ packages:
     resolution: {integrity: sha512-sqKVVVOe5ivCaXDWivIJYVSaEgdQK9ul7a4Kity5Iw7u9+wBAPbX1RMSnLLmp7O4Vzj0WOWwMAJsTL00xwaNug==}
     dev: false
 
-  /@hookform/error-message/2.0.0_a04009854ca8c4f2ea0b2ec522d05223:
+  /@hookform/error-message/2.0.0_179711dd7de287685c9248b7ee362f55:
     resolution: {integrity: sha512-Y90nHzjgL2MP7GFy75kscdvxrCTjtyxGmOLLxX14nd08OXRIh9lMH/y9Kpdo0p1IPowJBiZMHyueg7p+yrqynQ==}
     peerDependencies:
       react: '>=16.8.0'
@@ -547,15 +547,15 @@ packages:
     dependencies:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
-      react-hook-form: 7.17.4_react@17.0.2
+      react-hook-form: 7.19.5_react@17.0.2
     dev: false
 
-  /@hookform/resolvers/2.8.2_react-hook-form@7.17.4:
+  /@hookform/resolvers/2.8.2_react-hook-form@7.19.5:
     resolution: {integrity: sha512-oDTGrm7yHxT4VIv4kJcfjvWvozCbdcL0/jrpbAkeo39FYn78XnKOrrGTNmrXdfu+EQVkNIdZ47IYRFManZ4jUA==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.17.4_react@17.0.2
+      react-hook-form: 7.19.5_react@17.0.2
     dev: false
 
   /@humanwhocodes/config-array/0.5.0:
@@ -3967,8 +3967,8 @@ packages:
       scheduler: 0.20.2
     dev: false
 
-  /react-hook-form/7.17.4_react@17.0.2:
-    resolution: {integrity: sha512-7XhbCr7d9fDC1TgcK/BUbt7D3q0VJMu7jPErfsa0JrxVjv/nni41xWdJcy0Zb7R+Np8OsCkQ2lMyloAtE3DLiQ==}
+  /react-hook-form/7.19.5_react@17.0.2:
+    resolution: {integrity: sha512-+M9gd0nWWASuEitf5PQGOGNElnHknzY3rGISrPDXwsOmZb7c/jyvkRUqk4OJXaZit1ZwesSv+EysttdAeFEfmw==}
     peerDependencies:
       react: ^16.8.0 || ^17
     dependencies:

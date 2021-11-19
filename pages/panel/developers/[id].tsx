@@ -13,6 +13,7 @@ import { withAuth } from 'shared/hooks/useAuth'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { Pagination } from 'shared/components/Pagination'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
+import { defaultUserIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
@@ -99,7 +100,7 @@ const Developer = () => {
           <div className="m-auto">
             <div className="flex bg-white shadow-2xl p-8 rounded-3xl items-center my-4">
               <img
-                src={developer.data.image}
+                src={developer.data.image || defaultUserIcon}
                 alt="User image"
                 className="w-36 h-36 rounded-25 border-2 border-gray-200"
               />

@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import dayjs from 'dayjs'
 import { truncate } from 'shared/utils/text'
 import { Tooltip } from 'shared/components/Tooltip'
+import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
 const PluginsList = ({
   plugins,
@@ -33,7 +34,7 @@ const PluginsList = ({
             <tr className="bg-blue-500 bg-opacity-0 hover:bg-opacity-10 cursor-pointer transition-colors">
               <td className={classNames(padding, 'flex items-center')}>
                 <img
-                  src={plugin.icon || '/collapp.svg'}
+                  src={plugin.icon || defaultPluginIcon}
                   className={classNames(
                     imgSize,
                     'shadow-lg mr-3 bg-gray-150 rounded-25 bg-white',

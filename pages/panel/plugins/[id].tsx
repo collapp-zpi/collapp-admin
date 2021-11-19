@@ -26,6 +26,7 @@ import Link from 'next/link'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { IoCheckmarkSharp, IoCloseSharp } from 'react-icons/io5'
+import { defaultPluginIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query
@@ -124,7 +125,7 @@ const Plugin = () => {
             <div className="bg-white shadow-2xl p-8 rounded-3xl">
               <div className="flex items-center">
                 <img
-                  src={icon || '/collapp.svg'}
+                  src={icon || defaultPluginIcon}
                   className="w-36 h-36 rounded-25 border-2"
                   alt="Plugin icon"
                 />

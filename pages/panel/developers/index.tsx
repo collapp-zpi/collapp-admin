@@ -12,6 +12,7 @@ import { DeveloperUser } from '@prisma/client'
 import { truncate } from 'shared/utils/text'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { withAuth } from 'shared/hooks/useAuth'
+import { defaultUserIcon } from 'shared/utils/defaultIcons'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = objectPick(context.query, ['limit', 'page'])
@@ -83,7 +84,7 @@ function Developers() {
                       <tr className="bg-blue-500 bg-opacity-0 hover:bg-opacity-10 cursor-pointer transition-colors">
                         <td className="p-4 flex items-center">
                           <img
-                            src={developer.image || '/collapp.svg'}
+                            src={developer.image || defaultUserIcon}
                             className="shadow-lg mr-3 bg-gray-150 rounded-25 bg-white w-8 h-8"
                             alt="Developer image"
                           />

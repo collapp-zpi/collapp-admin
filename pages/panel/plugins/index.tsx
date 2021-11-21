@@ -1,11 +1,11 @@
-import { GetServerSideProps } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import NavigationPanel from 'includes/components/NavigationPanel'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
-import { generateKey, objectPick } from 'shared/utils/object'
+import { objectPick } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { object, string } from 'yup'
 import { InputText } from 'shared/components/input/InputText'
@@ -15,6 +15,7 @@ import Head from 'next/head'
 import { InputSelect } from 'shared/components/input/InputSelect'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -36,30 +37,18 @@ const PluginStatus = [
   },
 ]
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   const params = objectPick(context.query, ['limit', 'page', 'name'])
   const search = new URLSearchParams(params)
 
-  const res = await fetch(`${process.env.BASE_URL}/api/plugins?${search}`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
-
-  if (!res.ok) {
-    return {
-      props: { error: await res.json() },
-    }
-  }
+  const fetch = fetchApiFallback(context)
+  const plugins = await fetch(['plugins', params], `/api/plugins?${search}`)
 
   return {
     props: {
-      fallback: {
-        [generateKey('plugins', params)]: await res.json(),
-      },
+      fallback: { ...plugins },
     },
   }
 }

@@ -6,7 +6,6 @@ import Button from 'shared/components/button/Button'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
-import { generateKey } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { withAuth } from 'shared/hooks/useAuth'
@@ -14,49 +13,25 @@ import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { Pagination } from 'shared/components/Pagination'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { defaultUserIcon } from 'shared/utils/defaultIcons'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
-  const { id } = context.query
-  const developerRes = await fetch(
-    `${process.env.BASE_URL}/api/developers/${id}`,
-    {
-      method: 'GET',
-      headers: {
-        ...(context?.req?.headers?.cookie && {
-          cookie: context.req.headers.cookie,
-        }),
-      },
-    },
+  const id = String(context.query.id)
+  const fetch = fetchApiFallback(context)
+
+  const developers = await fetch(['developers', id], `/api/developers/${id}`)
+  const plugins = await fetch(
+    ['developers', id, 'plugins'],
+    `/api/developers/${id}/plugins`,
   )
-
-  if (!developerRes.ok) {
-    return { props: { error: await developerRes.json() } }
-  }
-
-  const pluginsRes = await fetch(
-    `${process.env.BASE_URL}/api/developers/${id}/plugins`,
-    {
-      method: 'GET',
-      headers: {
-        ...(context?.req?.headers?.cookie && {
-          cookie: context.req.headers.cookie,
-        }),
-      },
-    },
-  )
-
-  if (!pluginsRes.ok) {
-    return { props: { error: await pluginsRes.json() } }
-  }
 
   return {
     props: {
       fallback: {
-        [generateKey('developers', String(id))]: await developerRes.json(),
-        [generateKey('developers', String(id), 'plugins')]:
-          await pluginsRes.json(),
+        ...developers,
+        ...plugins,
       },
     },
   }

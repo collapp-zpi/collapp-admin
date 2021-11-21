@@ -1,4 +1,4 @@
-import type { GetServerSideProps } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import React, { useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
@@ -27,27 +27,18 @@ import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { IoCheckmarkSharp, IoCloseSharp } from 'react-icons/io5'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query
-  const res = await fetch(`${process.env.BASE_URL}/api/plugins/${id}`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
-
-  if (!res.ok) {
-    return { props: { error: await res.json() } }
-  }
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const id = String(context.query.id)
+  const fetch = fetchApiFallback(context)
+  const plugin = await fetch(['plugin', id], `/api/plugins/${id}`)
 
   return {
     props: {
-      fallback: {
-        [generateKey('plugin', String(id))]: await res.json(),
-      },
+      fallback: { ...plugin },
     },
   }
 }

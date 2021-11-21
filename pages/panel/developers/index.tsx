@@ -1,8 +1,8 @@
-import { GetServerSideProps } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import NavigationPanel from 'includes/components/NavigationPanel'
-import { generateKey, objectPick } from 'shared/utils/object'
+import { objectPick } from 'shared/utils/object'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { useQuery } from 'shared/hooks/useQuery'
 import { Pagination } from 'shared/components/Pagination'
@@ -13,31 +13,23 @@ import { truncate } from 'shared/utils/text'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { withAuth } from 'shared/hooks/useAuth'
 import { defaultUserIcon } from 'shared/utils/defaultIcons'
+import { fetchApiFallback } from 'shared/utils/fetchApi'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
   const params = objectPick(context.query, ['limit', 'page'])
   const search = new URLSearchParams(params)
 
-  const res = await fetch(`${process.env.BASE_URL}/api/developers?${search}`, {
-    method: 'GET',
-    headers: {
-      ...(context?.req?.headers?.cookie && {
-        cookie: context.req.headers.cookie,
-      }),
-    },
-  })
-
-  if (!res.ok) {
-    return {
-      props: { error: await res.json() },
-    }
-  }
+  const fetch = fetchApiFallback(context)
+  const developers = await fetch(
+    ['developers', params],
+    `/api/developers?${search}`,
+  )
 
   return {
     props: {
-      fallback: {
-        [generateKey('developers', params)]: await res.json(),
-      },
+      fallback: { ...developers },
     },
   }
 }

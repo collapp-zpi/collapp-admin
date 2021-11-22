@@ -1,8 +1,6 @@
-import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import NavigationPanel from 'includes/components/NavigationPanel'
-import { objectPick } from 'shared/utils/object'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { useQuery } from 'shared/hooks/useQuery'
 import { Pagination } from 'shared/components/Pagination'
@@ -13,26 +11,6 @@ import { truncate } from 'shared/utils/text'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { withAuth } from 'shared/hooks/useAuth'
 import { defaultUserIcon } from 'shared/utils/defaultIcons'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const params = objectPick(context.query, ['limit', 'page'])
-  const search = new URLSearchParams(params)
-
-  const fetch = fetchApiFallback(context)
-  const developers = await fetch(
-    ['developers', params],
-    `/api/developers?${search}`,
-  )
-
-  return {
-    props: {
-      fallback: { ...developers },
-    },
-  }
-}
 
 function Developers() {
   const [, setFilters] = useFilters()

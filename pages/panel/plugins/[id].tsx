@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next'
 import React, { useState } from 'react'
 import Modal from 'shared/components/Modal'
 import Button from 'shared/components/button/Button'
@@ -20,28 +19,12 @@ import toast from 'react-hot-toast'
 import { generateKey } from 'shared/utils/object'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { useQuery } from 'shared/hooks/useQuery'
-import { withFallback } from 'shared/hooks/useApiForm'
 import { useSWRConfig } from 'swr'
 import Link from 'next/link'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { IoCheckmarkSharp, IoCloseSharp } from 'react-icons/io5'
 import { defaultPluginIcon } from 'shared/utils/defaultIcons'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const id = String(context.query.id)
-  const fetch = fetchApiFallback(context)
-  const plugin = await fetch(['plugin', id], `/api/plugins/${id}`)
-
-  return {
-    props: {
-      fallback: { ...plugin },
-    },
-  }
-}
 
 export const parseFileSize = (bytes: number) => {
   if (!bytes) return '0 B'
@@ -241,7 +224,7 @@ const Plugin = () => {
   )
 }
 
-export default withAuth(withFallback(Plugin))
+export default withAuth(Plugin)
 
 const ReviewModal = ({
   visible,

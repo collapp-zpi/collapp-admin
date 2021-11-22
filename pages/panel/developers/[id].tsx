@@ -1,4 +1,3 @@
-import type { GetServerSidePropsContext } from 'next'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import NavigationPanel from 'includes/components/NavigationPanel'
@@ -13,29 +12,6 @@ import { useFilters, withFilters } from 'shared/hooks/useFilters'
 import { Pagination } from 'shared/components/Pagination'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
 import { defaultUserIcon } from 'shared/utils/defaultIcons'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const id = String(context.query.id)
-  const fetch = fetchApiFallback(context)
-
-  const developers = await fetch(['developers', id], `/api/developers/${id}`)
-  const plugins = await fetch(
-    ['developers', id, 'plugins'],
-    `/api/developers/${id}/plugins`,
-  )
-
-  return {
-    props: {
-      fallback: {
-        ...developers,
-        ...plugins,
-      },
-    },
-  }
-}
 
 const Developer = () => {
   const [, setFilters] = useFilters()

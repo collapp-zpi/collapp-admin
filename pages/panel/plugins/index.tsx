@@ -1,11 +1,9 @@
-import { GetServerSidePropsContext } from 'next'
 import React from 'react'
 import PluginsList from 'includes/components/PluginsList'
 import NavigationPanel from 'includes/components/NavigationPanel'
 import { LogoSpinner } from 'shared/components/LogoSpinner'
 import { Pagination } from 'shared/components/Pagination'
 import { useFilters, withFilters } from 'shared/hooks/useFilters'
-import { objectPick } from 'shared/utils/object'
 import { useQuery } from 'shared/hooks/useQuery'
 import { object, string } from 'yup'
 import { InputText } from 'shared/components/input/InputText'
@@ -15,7 +13,6 @@ import Head from 'next/head'
 import { InputSelect } from 'shared/components/input/InputSelect'
 import { withAuth } from 'shared/hooks/useAuth'
 import { ErrorInfo } from 'shared/components/ErrorInfo'
-import { fetchApiFallback } from 'shared/utils/fetchApi'
 
 const filtersSchema = object().shape({
   name: string().default(''),
@@ -36,22 +33,6 @@ const PluginStatus = [
     value: 'Updating',
   },
 ]
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const params = objectPick(context.query, ['limit', 'page', 'name'])
-  const search = new URLSearchParams(params)
-
-  const fetch = fetchApiFallback(context)
-  const plugins = await fetch(['plugins', params], `/api/plugins?${search}`)
-
-  return {
-    props: {
-      fallback: { ...plugins },
-    },
-  }
-}
 
 function Plugins() {
   const [, setFilters] = useFilters()

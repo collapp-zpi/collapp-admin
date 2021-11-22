@@ -24,7 +24,7 @@ const PluginsList = ({
         <tr className="text-left">
           <th className={padding}>Name</th>
           <th className={padding}>Description</th>
-          <th className={padding}>Date</th>
+          <th className={padding}>Created at</th>
           <th className={padding}>Status</th>
         </tr>
       </thead>

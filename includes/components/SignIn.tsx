@@ -14,8 +14,8 @@ const schema = object().shape({
   email: string().email().required(),
 })
 
-const onError = () => {
-  toast.error('Email was not send.')
+const onError = (data: any) => {
+  toast.error(`Email was not send. ${data.message}`)
 }
 
 const query = async ({ email }: { email: string }) => {

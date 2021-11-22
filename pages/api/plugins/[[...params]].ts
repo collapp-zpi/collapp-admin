@@ -29,24 +29,30 @@ class Plugins {
     @Query('name') name?: string,
     @Query('status') status?: Status,
   ) {
-    return await fetchWithPagination('draftPlugin', limit, page, {
-      ...(name && { name: { contains: name, mode: 'insensitive' } }),
-      ...(status === Status.Private && {
-        isPending: false,
-      }),
-      ...(status === Status.Pending && {
-        isPending: true,
-        published: null,
-      }),
-      ...(status === Status.Updating && {
-        isPending: true,
-        NOT: [
-          {
-            published: null,
-          },
-        ],
-      }),
-    })
+    return await fetchWithPagination(
+      'draftPlugin',
+      limit,
+      page,
+      {
+        ...(name && { name: { contains: name, mode: 'insensitive' } }),
+        ...(status === Status.Private && {
+          isPending: false,
+        }),
+        ...(status === Status.Pending && {
+          isPending: true,
+          published: null,
+        }),
+        ...(status === Status.Updating && {
+          isPending: true,
+          NOT: [
+            {
+              published: null,
+            },
+          ],
+        }),
+      },
+      { updatedAt: 'desc' },
+    )
   }
 
   @Get('/:id')

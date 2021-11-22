@@ -78,6 +78,9 @@ class Plugins {
           include: {
             admin: true,
           },
+          orderBy: {
+            date: 'desc',
+          },
         },
       },
     })

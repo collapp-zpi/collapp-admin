@@ -187,7 +187,7 @@ const Plugin = () => {
                 <Button
                   hasIcon
                   color="light"
-                  onClick={handleDownload(cloudfrontUrl + source.url)}
+                  onClick={handleDownload(cloudfrontUrl + source?.url)}
                 >
                   <CgSoftwareDownload size="1.5rem" />
                 </Button>

@@ -6,7 +6,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import download from 'downloadjs'
-import { amazonUrl } from 'shared/utils/awsHelpers'
+import { cloudfrontUrl } from 'shared/utils/awsHelpers'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import { BsFileEarmarkZip, BsFillQuestionSquareFill } from 'react-icons/bs'
 import {
@@ -67,6 +67,14 @@ const Plugin = () => {
   } = data || {}
 
   const canReview = isPending && !!source && !isBuilding
+
+  const handleDownload = (url: string) => () => {
+    try {
+      download(url)
+    } catch (e) {
+      toast.error(`Could not download file, please try again later.`)
+    }
+  }
 
   return (
     <div>
@@ -179,7 +187,7 @@ const Plugin = () => {
                 <Button
                   hasIcon
                   color="light"
-                  onClick={() => download(amazonUrl + source.url)}
+                  onClick={handleDownload(cloudfrontUrl + source.url)}
                 >
                   <CgSoftwareDownload size="1.5rem" />
                 </Button>

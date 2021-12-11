@@ -15,7 +15,11 @@ const schema = object().shape({
 })
 
 const onError = (data: any) => {
-  toast.error(`Email was not send. ${data.message}`)
+  toast.error(
+    `Email was not send. ${
+      data.message === 'Login error' ? 'Unauthorized email' : data.message
+    }`,
+  )
 }
 
 const query = async ({ email }: { email: string }) => {

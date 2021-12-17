@@ -16,7 +16,7 @@ const schema = object().shape({
 
 const onError = (data: any) => {
   toast.error(
-    `Email was not send. ${
+    `Email was not sent. ${
       data.message === 'Login error' ? 'Unauthorized email' : data.message
     }`,
   )

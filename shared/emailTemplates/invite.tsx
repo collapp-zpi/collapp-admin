@@ -10,19 +10,21 @@ import {
   Tailwind,
 } from '@react-email/components'
 
-export const SignInTemplate = ({
-  email,
+export const InviteTemplate = ({
+  from,
+  space,
   redirect,
 }: {
-  email: string
+  from: string
+  space: string
   redirect: string
 }) => (
   <Html>
     <Head />
-    <Preview>Sign in to Collapp</Preview>
+    <Preview>You got invited in Collapp</Preview>
     <Tailwind>
       <Body className="bg-gray-200 p-8 text-gray-600 font-sans">
-        <Container className="bg-gray-50 max-w-7xl mx-auto p-8 rounded-3xl text-center">
+        <Container className="bg-gray-50 max-w-3xl mx-auto p-8 rounded-3xl text-center">
           <Section>
             <Img
               src="https://collapp.sitarz.dev/logo.svg"
@@ -32,14 +34,15 @@ export const SignInTemplate = ({
               Hello, there! 👋
             </h1>
             <div className="text-lg mb-4">
-              Sign in as <strong>{email}</strong>
+              <strong>{from}</strong> invites you to join{' '}
+              <strong>{space}</strong>
             </div>
             <Button
               href={redirect}
               className="px-6 py-3 bg-blue-500 mx-auto rounded-xl font-bold text-white cursor-pointer hover:bg-blue-600 shadow-xl transition-colors"
               target="_blank"
             >
-              Sign in
+              Accept
             </Button>
           </Section>
 

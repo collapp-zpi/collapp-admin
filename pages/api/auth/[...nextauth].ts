@@ -3,7 +3,7 @@ import EmailProvider from 'next-auth/providers/email'
 import { prisma } from 'shared/utils/prismaClient'
 import { PrismaExtendedAdapter } from 'shared/utils/PrismaExtendedAdapter'
 import { Resend } from 'resend'
-import { SignInTemplate } from 'includes/emailTemplates/sign-in'
+import { SignInTemplate } from 'shared/emailTemplates/sign-in'
 
 const resend = new Resend(process.env.EMAIL_KEY)
 

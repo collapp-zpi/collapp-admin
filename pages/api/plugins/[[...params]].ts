@@ -12,7 +12,6 @@ import {
 import { prisma } from 'shared/utils/prismaClient'
 import { NextAuthGuard, RequestUser, User } from 'shared/utils/apiDecorators'
 import { fetchWithPagination } from 'shared/utils/fetchWithPagination'
-import { amazonUrl } from 'shared/utils/awsHelpers'
 
 enum Status {
   Private = 'Private',
@@ -238,12 +237,10 @@ class Plugins {
         requestId: id,
         name: pluginToBeBuilt.name,
         developer: {
-          name: pluginToBeBuilt.author.name,
-          email: pluginToBeBuilt.author.email,
+          name: pluginToBeBuilt.author!.name,
+          email: pluginToBeBuilt.author!.email,
         },
-        zip: {
-          url: amazonUrl + pluginToBeBuilt.source?.url,
-        },
+        path: pluginToBeBuilt.source?.url,
       }),
     })
 

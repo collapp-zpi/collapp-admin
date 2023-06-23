@@ -27,6 +27,7 @@ specifiers:
   eslint-plugin-prettier: ^4.0.0
   next: 11.1.2
   next-auth: ^4.0.0-beta.4
+  nodemailer: ^6.9.3
   path-to-regexp: ^6.2.0
   postcss: ^8.3.9
   prettier: ^2.4.1
@@ -66,7 +67,8 @@ dependencies:
   downloadjs: 1.4.7
   eslint-plugin-prettier: 4.0.0_n2lvxvl4plhqfda2txn36ygita
   next: 11.1.2_hglj242s3cxzp6l7bvj55jhuiu
-  next-auth: 4.0.0-beta.4_sfoxds7t5ydpegc3knd667wn6m
+  next-auth: 4.0.0-beta.4_zlvd6vfoxokhtfyp45q5itxxlu
+  nodemailer: 6.9.3
   path-to-regexp: 6.2.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -773,7 +775,7 @@ packages:
       next-auth: '>=4'
     dependencies:
       '@prisma/client': 3.1.1_prisma@3.1.1
-      next-auth: 4.0.0-beta.4_sfoxds7t5ydpegc3knd667wn6m
+      next-auth: 4.0.0-beta.4_zlvd6vfoxokhtfyp45q5itxxlu
     dev: false
 
   /@next/env/11.1.2:
@@ -4141,7 +4143,7 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
 
-  /next-auth/4.0.0-beta.4_sfoxds7t5ydpegc3knd667wn6m:
+  /next-auth/4.0.0-beta.4_zlvd6vfoxokhtfyp45q5itxxlu:
     resolution: {integrity: sha512-1KRkRUenCbtTv2Y1KiuX8e0T+KBKv94Nt8KFv52xnqc1Ye3giy02J03htd2U+O3uE+hnqE44KBUa0GoHn2727g==}
     peerDependencies:
       nodemailer: ^6.6.2
@@ -4154,6 +4156,7 @@ packages:
       '@babel/runtime': 7.15.4
       futoin-hkdf: 1.4.2
       jose: 1.28.1
+      nodemailer: 6.9.3
       oauth: 0.9.15
       openid-client: 4.9.0
       preact: 10.5.14
@@ -4302,6 +4305,11 @@ packages:
 
   /node-releases/2.0.0:
     resolution: {integrity: sha512-aA87l0flFYMzCHpTM3DERFSYxc6lv/BltdbRTOMZuxZ0cwZCD3mejE5n9vLhSJCN++/eOqr77G1IO5uXxlQYWA==}
+
+  /nodemailer/6.9.3:
+    resolution: {integrity: sha512-fy9v3NgTzBngrMFkDsKEj0r02U7jm6XfC3b52eoNV+GCrGj+s8pt5OqhiJdWKuw51zCTdiNR/IUD1z33LIIGpg==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt/6.0.0:
     resolution: {integrity: sha512-ZwLpbTgdhuZUnZzjd7nb1ZV+4DoiC6/sfiVKok72ym/4Tlf+DFdlHYmT2JPmcNNWV6Pi3SDf1kT+A4r9RTuT9g==}

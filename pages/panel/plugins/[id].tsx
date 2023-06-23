@@ -6,7 +6,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import download from 'downloadjs'
-import { cloudfrontUrl } from 'shared/utils/awsHelpers'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md'
 import { BsFileEarmarkZip, BsFillQuestionSquareFill } from 'react-icons/bs'
 import {
@@ -187,7 +186,7 @@ const Plugin = () => {
                 <Button
                   hasIcon
                   color="light"
-                  onClick={handleDownload(cloudfrontUrl + source?.url)}
+                  onClick={handleDownload('/api/download' + source?.url)}
                 >
                   <CgSoftwareDownload size="1.5rem" />
                 </Button>

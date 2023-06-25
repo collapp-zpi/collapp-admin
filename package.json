@@ -20,6 +20,7 @@
     "@next-auth/prisma-adapter": "^0.5.2-next.15",
     "@prisma/client": "3.1.1",
     "@react-email/components": "^0.0.7",
+    "@react-email/font": "^0.0.2",
     "@storyofams/next-api-decorators": "^1.6.0",
     "@types/downloadjs": "^1.4.2",
     "aws-sdk": "^2.1019.0",

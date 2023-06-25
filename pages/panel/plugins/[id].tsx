@@ -67,9 +67,13 @@ const Plugin = () => {
 
   const canReview = isPending && !!source && !isBuilding
 
-  const handleDownload = (url: string) => () => {
+  const handleDownload = (url: string, name: string) => async () => {
     try {
-      download(url)
+      const data = await fetch(process.env.NEXT_PUBLIC_STORAGE_ROOT + url).then(
+        (res) => res.blob(),
+      )
+
+      download(data, name)
     } catch (e) {
       toast.error(`Could not download file, please try again later.`)
     }
@@ -186,7 +190,7 @@ const Plugin = () => {
                 <Button
                   hasIcon
                   color="light"
-                  onClick={handleDownload('/api/download' + source?.url)}
+                  onClick={handleDownload(source?.url, source?.name)}
                 >
                   <CgSoftwareDownload size="1.5rem" />
                 </Button>

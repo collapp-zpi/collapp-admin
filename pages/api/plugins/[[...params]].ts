@@ -227,7 +227,17 @@ class Plugins {
       },
     })
 
-    fetch('https://collapp-build-server.herokuapp.com/build', {
+    console.log(process.env.BUILD_SERVER! + '/build')
+    console.log({
+      requestId: id,
+      name: pluginToBeBuilt.name,
+      developer: {
+        name: pluginToBeBuilt.author!.name,
+        email: pluginToBeBuilt.author!.email,
+      },
+      path: pluginToBeBuilt.source?.url,
+    })
+    fetch(process.env.BUILD_SERVER! + '/build', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

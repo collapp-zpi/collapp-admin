@@ -4,6 +4,7 @@ import { prisma } from 'shared/utils/prismaClient'
 import { PrismaExtendedAdapter } from 'shared/utils/PrismaExtendedAdapter'
 import { Resend } from 'resend'
 import { SignInTemplate } from 'shared/emailTemplates/sign-in'
+import { Adapter } from 'next-auth/adapters'
 
 const resend = new Resend(process.env.EMAIL_KEY)
 
@@ -27,7 +28,7 @@ export default NextAuth({
     verifyRequest: '../../',
     newUser: '../../',
   },
-  adapter: PrismaExtendedAdapter('admin'),
+  adapter: PrismaExtendedAdapter('admin') as Adapter,
   secret: process.env.AUTH_SECRET,
   callbacks: {
     async signIn({ user: { email } }) {
